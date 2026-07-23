@@ -36,6 +36,36 @@ $tests = @(
     Match = 'UVM_ERROR\s*:\s*0'
   },
   @{
+    Name = 'amba_chi_version_a_test'
+    ExpectPass = $true
+    Match = 'UVM_ERROR\s*:\s*0'
+  },
+  @{
+    Name = 'amba_chi_version_b_test'
+    ExpectPass = $true
+    Match = 'UVM_ERROR\s*:\s*0'
+  },
+  @{
+    Name = 'amba_chi_version_c_test'
+    ExpectPass = $true
+    Match = 'UVM_ERROR\s*:\s*0'
+  },
+  @{
+    Name = 'amba_chi_version_d_test'
+    ExpectPass = $true
+    Match = 'UVM_ERROR\s*:\s*0'
+  },
+  @{
+    Name = 'amba_chi_version_e_test'
+    ExpectPass = $true
+    Match = 'UVM_ERROR\s*:\s*0'
+  },
+  @{
+    Name = 'amba_chi_data_multibeat_test'
+    ExpectPass = $true
+    Match = 'UVM_ERROR\s*:\s*0'
+  },
+  @{
     Name = 'amba_chi_snoop_burst_test'
     ExpectPass = $true
     Match = 'UVM_ERROR\s*:\s*0'

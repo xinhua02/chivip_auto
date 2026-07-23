@@ -36,23 +36,31 @@ filesets:
       - amba_chi_base_vseq.sv: {is_include_file: true}
       - amba_chi_master_feature_matrix_seq.sv: {is_include_file: true}
       - amba_chi_slave_feature_matrix_seq.sv: {is_include_file: true}
+      - amba_chi_master_version_matrix_seq.sv: {is_include_file: true}
+      - amba_chi_slave_version_matrix_seq.sv: {is_include_file: true}
+      - amba_chi_master_data_multibeat_seq.sv: {is_include_file: true}
+      - amba_chi_slave_data_multibeat_seq.sv: {is_include_file: true}
       - amba_chi_write_vseq.sv: {is_include_file: true}
       - amba_chi_snoop_vseq.sv: {is_include_file: true}
       - amba_chi_snoop_burst_vseq.sv: {is_include_file: true}
-      - amba_chi_snoop_burst_vseq.sv: {is_include_file: true}
-      - amba_chi_snoop_orphan_vseq.sv: {is_include_file: true}
       - amba_chi_snoop_orphan_vseq.sv: {is_include_file: true}
       - amba_chi_reorder_vseq.sv: {is_include_file: true}
       - amba_chi_feature_matrix_vseq.sv: {is_include_file: true}
+      - amba_chi_version_matrix_vseq.sv: {is_include_file: true}
+      - amba_chi_data_multibeat_vseq.sv: {is_include_file: true}
       - amba_chi_overflow_vseq.sv: {is_include_file: true}
       - amba_chi_base_test.sv: {is_include_file: true}
       - amba_chi_write_test.sv: {is_include_file: true}
       - amba_chi_snoop_burst_test.sv: {is_include_file: true}
       - amba_chi_snoop_orphan_test.sv: {is_include_file: true}
       - amba_chi_snoop_test.sv: {is_include_file: true}
-      - amba_chi_snoop_burst_test.sv: {is_include_file: true}
       - amba_chi_feature_matrix_test.sv: {is_include_file: true}
-      - amba_chi_snoop_orphan_test.sv: {is_include_file: true}
+      - amba_chi_version_a_test.sv: {is_include_file: true}
+      - amba_chi_version_b_test.sv: {is_include_file: true}
+      - amba_chi_version_c_test.sv: {is_include_file: true}
+      - amba_chi_version_d_test.sv: {is_include_file: true}
+      - amba_chi_version_e_test.sv: {is_include_file: true}
+      - amba_chi_data_multibeat_test.sv: {is_include_file: true}
       - amba_chi_reorder_test.sv: {is_include_file: true}
       - amba_chi_overflow_test.sv: {is_include_file: true}
       - amba_chi_env_pkg.sv

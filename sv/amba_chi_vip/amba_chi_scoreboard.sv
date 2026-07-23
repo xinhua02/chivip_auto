@@ -15,7 +15,16 @@ class amba_chi_scoreboard extends uvm_component;
   bit exp_data[bit [15:0]];
   bit exp_snoop[bit [15:0]];
   bit resp_seen[bit [15:0]];
+  bit [7:0] resp_status_seen[bit [15:0]];
+  bit [5:0] resp_dbid_seen[bit [15:0]];
   bit data_seen[bit [15:0]];
+  bit data_complete[bit [15:0]];
+  bit data_last_seen[bit [15:0]];
+  bit [3:0] next_data_id[bit [15:0]];
+  bit [15:0] first_data_be[bit [15:0]];
+  bit [5:0] data_dbid_ref[bit [15:0]];
+  bit [3:0] data_ccid_ref[bit [15:0]];
+  bit data_ref_valid[bit [15:0]];
   bit snoop_seen[bit [15:0]];
   int unsigned data_beats_seen[bit [15:0]];
   int unsigned req_count;
@@ -91,7 +100,7 @@ class amba_chi_scoreboard extends uvm_component;
     needs_data = exp_data.exists(txn_id) ? exp_data[txn_id] : 1'b0;
     needs_snoop = exp_snoop.exists(txn_id) ? exp_snoop[txn_id] : 1'b0;
     got_resp = resp_seen.exists(txn_id) ? resp_seen[txn_id] : 1'b0;
-    got_data = data_seen.exists(txn_id) ? data_seen[txn_id] : 1'b0;
+    got_data = data_complete.exists(txn_id) ? data_complete[txn_id] : 1'b0;
     got_snoop = snoop_seen.exists(txn_id) ? snoop_seen[txn_id] : 1'b0;
 
     if (got_resp && (!needs_data || got_data) && (!needs_snoop || got_snoop)) begin
@@ -99,7 +108,16 @@ class amba_chi_scoreboard extends uvm_component;
       req_issue_cycle.delete(txn_id);
       exp_data.delete(txn_id);
       exp_snoop.delete(txn_id);
+      resp_status_seen.delete(txn_id);
+      resp_dbid_seen.delete(txn_id);
       data_beats_seen.delete(txn_id);
+      data_complete.delete(txn_id);
+      data_last_seen.delete(txn_id);
+      next_data_id.delete(txn_id);
+      first_data_be.delete(txn_id);
+      data_dbid_ref.delete(txn_id);
+      data_ccid_ref.delete(txn_id);
+      data_ref_valid.delete(txn_id);
     end
   endfunction
 
@@ -140,7 +158,16 @@ class amba_chi_scoreboard extends uvm_component;
     req_issue_cycle[item.txn_id] = cycle_count;
     exp_data[item.txn_id] = need_data;
     exp_snoop[item.txn_id] = need_snoop;
+    resp_status_seen[item.txn_id] = 8'h00;
+    resp_dbid_seen[item.txn_id] = 6'h00;
     data_beats_seen[item.txn_id] = 0;
+    data_complete[item.txn_id] = 1'b0;
+    data_last_seen[item.txn_id] = 1'b0;
+    next_data_id[item.txn_id] = 4'd0;
+    first_data_be[item.txn_id] = 16'h0000;
+    data_dbid_ref[item.txn_id] = 6'h00;
+    data_ccid_ref[item.txn_id] = 4'h0;
+    data_ref_valid[item.txn_id] = 1'b0;
 
     if (pending_reqs.num() > max_outstanding_seen) begin
       max_outstanding_seen = pending_reqs.num();
@@ -227,6 +254,8 @@ class amba_chi_scoreboard extends uvm_component;
 
       resp_count++;
       resp_seen[item.txn_id] = 1'b1;
+      resp_status_seen[item.txn_id] = item.resp_status;
+      resp_dbid_seen[item.txn_id] = item.dbid;
       completed_reqs[item.txn_id] = req;
       pending_reqs.delete(item.txn_id);
 
@@ -266,6 +295,11 @@ class amba_chi_scoreboard extends uvm_component;
                              item.txn_id, req.opcode))
       end
 
+      if (data_last_seen.exists(item.txn_id) && data_last_seen[item.txn_id]) begin
+        `uvm_error(get_type_name(),
+                   $sformatf("data txn_id=0x%0h observed after last beat", item.txn_id))
+      end
+
       data_seen[item.txn_id] = 1'b1;
       data_count++;
       data_beats_seen[item.txn_id]++;
@@ -276,6 +310,69 @@ class amba_chi_scoreboard extends uvm_component;
       if (item.data_be == '0) begin
         `uvm_error(get_type_name(),
                    $sformatf("data channel txn_id=0x%0h has empty byte-enable", item.txn_id))
+      end
+      if (!amba_chi_is_contiguous_be(item.data_be)) begin
+        `uvm_error(get_type_name(),
+                   $sformatf("data channel txn_id=0x%0h has non-contiguous byte-enable 0x%0h",
+                             item.txn_id, item.data_be))
+      end
+
+      if (data_beats_seen[item.txn_id] == 1) begin
+        if (item.data_id != 4'd0) begin
+          `uvm_error(get_type_name(),
+                     $sformatf("data txn_id=0x%0h first beat id must be 0, got %0d",
+                               item.txn_id, item.data_id))
+        end
+        first_data_be[item.txn_id] = item.data_be;
+        data_dbid_ref[item.txn_id] = item.dbid;
+        data_ccid_ref[item.txn_id] = item.ccid;
+        data_ref_valid[item.txn_id] = 1'b1;
+      end else begin
+        if (item.data_id != next_data_id[item.txn_id]) begin
+          `uvm_error(get_type_name(),
+                     $sformatf("data txn_id=0x%0h beat id discontinuity: expected %0d got %0d",
+                               item.txn_id, next_data_id[item.txn_id], item.data_id))
+        end
+        if (data_ref_valid[item.txn_id]) begin
+          if (item.dbid != data_dbid_ref[item.txn_id]) begin
+            `uvm_error(get_type_name(),
+                       $sformatf("data txn_id=0x%0h DBID mismatch across beats: %0d vs %0d",
+                                 item.txn_id, data_dbid_ref[item.txn_id], item.dbid))
+          end
+          if (item.ccid != data_ccid_ref[item.txn_id]) begin
+            `uvm_error(get_type_name(),
+                       $sformatf("data txn_id=0x%0h CCID mismatch across beats: %0d vs %0d",
+                                 item.txn_id, data_ccid_ref[item.txn_id], item.ccid))
+          end
+        end
+      end
+
+      if (!item.data_last) begin
+        if (item.data_be != first_data_be[item.txn_id]) begin
+          `uvm_error(get_type_name(),
+                     $sformatf("data txn_id=0x%0h middle beat BE mismatch: first=0x%0h beat=0x%0h",
+                               item.txn_id, first_data_be[item.txn_id], item.data_be))
+        end
+      end else begin
+        if ((item.data_be & ~first_data_be[item.txn_id]) != 16'h0000) begin
+          `uvm_error(get_type_name(),
+                     $sformatf("data txn_id=0x%0h last beat BE not subset of first beat: first=0x%0h beat=0x%0h",
+                               item.txn_id, first_data_be[item.txn_id], item.data_be))
+        end
+      end
+
+      if (resp_seen.exists(item.txn_id) && resp_seen[item.txn_id] &&
+          resp_status_seen[item.txn_id] == AMBA_CHI_RESP_COMPDB &&
+          item.dbid != resp_dbid_seen[item.txn_id]) begin
+        `uvm_error(get_type_name(),
+                   $sformatf("data txn_id=0x%0h DBID mismatch with response: resp=%0d data=%0d",
+                             item.txn_id, resp_dbid_seen[item.txn_id], item.dbid))
+      end
+
+      next_data_id[item.txn_id] = item.data_id + 4'd1;
+      if (item.data_last) begin
+        data_last_seen[item.txn_id] = 1'b1;
+        data_complete[item.txn_id] = 1'b1;
       end
       if (cfg != null && data_beats_seen[item.txn_id] > cfg.master_cfg.max_data_beats) begin
         `uvm_error(get_type_name(),
@@ -345,9 +442,9 @@ class amba_chi_scoreboard extends uvm_component;
     end
 
     foreach (exp_data[txn_id]) begin
-      if (exp_data[txn_id] && (!data_seen.exists(txn_id) || !data_seen[txn_id])) begin
+      if (exp_data[txn_id] && (!data_complete.exists(txn_id) || !data_complete[txn_id])) begin
         `uvm_error(get_type_name(),
-                   $sformatf("request txn_id=0x%0h requires data but data was not seen", txn_id))
+                   $sformatf("request txn_id=0x%0h requires complete data but last beat was not seen", txn_id))
       end
     end
 

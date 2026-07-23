@@ -35,7 +35,7 @@ interface amba_chi_if #(int unsigned ADDR_WIDTH = 64,
   logic data_ready;
     logic [DATA_WIDTH-1:0] data_payload;
     logic [15:0] data_txn_id;
-  logic data_id;
+  logic [3:0] data_id;
   logic data_last;
   logic data_poison;
   logic [(DATA_WIDTH/8)-1:0] data_be;

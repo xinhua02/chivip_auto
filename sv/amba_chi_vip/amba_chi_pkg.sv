@@ -70,6 +70,12 @@ package amba_chi_pkg;
     AMBA_CHI_SNOOP_STASH_ONCE_SHARED = 8'h31
   } amba_chi_snoop_type_e;
 
+  `include "rules/amba_chi_rules_vA.svh"
+  `include "rules/amba_chi_rules_vB.svh"
+  `include "rules/amba_chi_rules_vC.svh"
+  `include "rules/amba_chi_rules_vD.svh"
+  `include "rules/amba_chi_rules_vE.svh"
+
   function automatic bit [15:0] amba_chi_version_feature_mask(amba_chi_version_e version);
     case (version)
       AMBA_CHI_VERSION_A: return 16'h0001;
@@ -226,57 +232,33 @@ package amba_chi_pkg;
            (resp_status == AMBA_CHI_RESP_PCRD_GRANT);
   endfunction
 
+  function automatic bit amba_chi_is_contiguous_be(bit [15:0] be);
+    bit seen_one;
+    bit seen_zero_after_one;
+
+    seen_one = 1'b0;
+    seen_zero_after_one = 1'b0;
+    for (int i = 0; i < 16; i++) begin
+      if (be[i]) begin
+        seen_one = 1'b1;
+        if (seen_zero_after_one) begin
+          return 1'b0;
+        end
+      end else if (seen_one) begin
+        seen_zero_after_one = 1'b1;
+      end
+    end
+    return be != 16'h0000;
+  endfunction
+
   function automatic bit amba_chi_supports_req_opcode(amba_chi_version_e version,
                                                       bit [7:0] opcode);
     case (version)
-      AMBA_CHI_VERSION_A: begin
-        case (opcode)
-          AMBA_CHI_REQ_READ_SHARED,
-          AMBA_CHI_REQ_READ_EXCL,
-          AMBA_CHI_REQ_WRITE_NO_SNP,
-          AMBA_CHI_REQ_WRITE_UNIQUE,
-          AMBA_CHI_REQ_WRITE_BACK_FULL,
-          AMBA_CHI_REQ_CLEAN_SHARED,
-          AMBA_CHI_REQ_CLEAN_INVALID,
-          AMBA_CHI_REQ_MAKE_INVALID,
-          AMBA_CHI_REQ_EVICT: return 1'b1;
-          default: return 1'b0;
-        endcase
-      end
-      AMBA_CHI_VERSION_B: begin
-        case (opcode)
-          AMBA_CHI_REQ_READ_ONCE,
-          AMBA_CHI_REQ_READ_CLEAN,
-          AMBA_CHI_REQ_READ_NOT_SHARED_DIRTY,
-          AMBA_CHI_REQ_WRITE_CLEAN_FULL,
-          AMBA_CHI_REQ_WRITE_EVICT_FULL: return 1'b1;
-          default: return amba_chi_supports_req_opcode(AMBA_CHI_VERSION_A, opcode);
-        endcase
-      end
-      AMBA_CHI_VERSION_C: begin
-        case (opcode)
-          AMBA_CHI_REQ_ATOMIC_SWAP,
-          AMBA_CHI_REQ_ATOMIC_ADD,
-          AMBA_CHI_REQ_ATOMIC_CLR,
-          AMBA_CHI_REQ_ATOMIC_SET: return 1'b1;
-          default: return amba_chi_supports_req_opcode(AMBA_CHI_VERSION_B, opcode);
-        endcase
-      end
-      AMBA_CHI_VERSION_D: begin
-        case (opcode)
-          AMBA_CHI_REQ_DVM_OP,
-          AMBA_CHI_REQ_PREFETCH_TGT: return 1'b1;
-          default: return amba_chi_supports_req_opcode(AMBA_CHI_VERSION_C, opcode);
-        endcase
-      end
-      AMBA_CHI_VERSION_E: begin
-        case (opcode)
-          AMBA_CHI_REQ_READ_UNIQUE,
-          AMBA_CHI_REQ_READ_PERSIST,
-          AMBA_CHI_REQ_STASH_ONCE_SHARED: return 1'b1;
-          default: return amba_chi_supports_req_opcode(AMBA_CHI_VERSION_D, opcode);
-        endcase
-      end
+      AMBA_CHI_VERSION_A: return amba_chi_supports_req_opcode_vA(opcode);
+      AMBA_CHI_VERSION_B: return amba_chi_supports_req_opcode_vB(opcode);
+      AMBA_CHI_VERSION_C: return amba_chi_supports_req_opcode_vC(opcode);
+      AMBA_CHI_VERSION_D: return amba_chi_supports_req_opcode_vD(opcode);
+      AMBA_CHI_VERSION_E: return amba_chi_supports_req_opcode_vE(opcode);
       default: return 1'b0;
     endcase
   endfunction
@@ -284,33 +266,11 @@ package amba_chi_pkg;
   function automatic bit amba_chi_supports_snoop_type(amba_chi_version_e version,
                                                       bit [7:0] snoop);
     case (version)
-      AMBA_CHI_VERSION_A,
-      AMBA_CHI_VERSION_B,
-      AMBA_CHI_VERSION_C: begin
-        case (snoop)
-          AMBA_CHI_SNOOP_READ_ONCE,
-          AMBA_CHI_SNOOP_READ_SHARED,
-          AMBA_CHI_SNOOP_READ_CLEAN,
-          AMBA_CHI_SNOOP_READ_NOT_SHARED_DIRTY,
-          AMBA_CHI_SNOOP_READ_UNIQUE,
-          AMBA_CHI_SNOOP_MAKE_INVALID,
-          AMBA_CHI_SNOOP_CLEAN_SHARED,
-          AMBA_CHI_SNOOP_CLEAN_INVALID: return 1'b1;
-          default: return 1'b0;
-        endcase
-      end
-      AMBA_CHI_VERSION_D: begin
-        if (snoop == AMBA_CHI_SNOOP_DVM) begin
-          return 1'b1;
-        end
-        return amba_chi_supports_snoop_type(AMBA_CHI_VERSION_C, snoop);
-      end
-      AMBA_CHI_VERSION_E: begin
-        if (snoop == AMBA_CHI_SNOOP_STASH_ONCE_SHARED) begin
-          return 1'b1;
-        end
-        return amba_chi_supports_snoop_type(AMBA_CHI_VERSION_D, snoop);
-      end
+      AMBA_CHI_VERSION_A: return amba_chi_supports_snoop_type_vA(snoop);
+      AMBA_CHI_VERSION_B: return amba_chi_supports_snoop_type_vB(snoop);
+      AMBA_CHI_VERSION_C: return amba_chi_supports_snoop_type_vC(snoop);
+      AMBA_CHI_VERSION_D: return amba_chi_supports_snoop_type_vD(snoop);
+      AMBA_CHI_VERSION_E: return amba_chi_supports_snoop_type_vE(snoop);
       default: return 1'b0;
     endcase
   endfunction
@@ -337,7 +297,7 @@ package amba_chi_pkg;
     rand bit [2:0] resp_err;
     rand bit [5:0] dbid;
     rand bit [3:0] ccid;
-    rand bit data_id;
+    rand bit [3:0] data_id;
     rand bit data_last;
     rand bit data_poison;
     rand bit [15:0] data_be;
