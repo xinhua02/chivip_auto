@@ -1,0 +1,50 @@
+
+name: "amba:dv:amba_chi_vip"
+description: "AMBA CHI verification IP skeleton"
+
+filesets:
+  files_dv:
+    files:
+      - amba_chi_if.sv
+      - amba_chi_pkg.sv
+      - amba_chi_sequencer.sv: {is_include_file: true}
+      - amba_chi_driver.sv: {is_include_file: true}
+      - amba_chi_monitor.sv: {is_include_file: true}
+      - amba_chi_agent.sv: {is_include_file: true}
+      - amba_chi_agent_pkg.sv
+      - amba_chi_master_pkg.sv
+      - amba_chi_slave_pkg.sv
+      - amba_chi_env_cfg.sv: {is_include_file: true}
+      - amba_chi_env_cov.sv: {is_include_file: true}
+      - amba_chi_virtual_sequencer.sv: {is_include_file: true}
+      - amba_chi_scoreboard.sv: {is_include_file: true}
+      - amba_chi_env.sv: {is_include_file: true}
+      - amba_chi_master_base_seq.sv: {is_include_file: true}
+      - amba_chi_slave_base_seq.sv: {is_include_file: true}
+      - amba_chi_master_write_seq.sv: {is_include_file: true}
+      - amba_chi_slave_write_seq.sv: {is_include_file: true}
+      - amba_chi_master_snoop_seq.sv: {is_include_file: true}
+      - amba_chi_slave_snoop_seq.sv: {is_include_file: true}
+      - amba_chi_master_reorder_seq.sv: {is_include_file: true}
+      - amba_chi_slave_reorder_seq.sv: {is_include_file: true}
+      - amba_chi_master_overflow_seq.sv: {is_include_file: true}
+      - amba_chi_slave_overflow_seq.sv: {is_include_file: true}
+      - amba_chi_base_vseq.sv: {is_include_file: true}
+      - amba_chi_write_vseq.sv: {is_include_file: true}
+      - amba_chi_snoop_vseq.sv: {is_include_file: true}
+      - amba_chi_reorder_vseq.sv: {is_include_file: true}
+      - amba_chi_overflow_vseq.sv: {is_include_file: true}
+      - amba_chi_base_test.sv: {is_include_file: true}
+      - amba_chi_write_test.sv: {is_include_file: true}
+      - amba_chi_snoop_test.sv: {is_include_file: true}
+      - amba_chi_reorder_test.sv: {is_include_file: true}
+      - amba_chi_overflow_test.sv: {is_include_file: true}
+      - amba_chi_env_pkg.sv
+      - amba_chi_test_pkg.sv
+      - tb.sv
+    file_type: systemVerilogSource
+
+targets:
+  default:
+    filesets:
+      - files_dv
