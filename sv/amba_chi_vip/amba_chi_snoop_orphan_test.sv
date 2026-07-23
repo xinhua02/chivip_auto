@@ -1,20 +1,15 @@
-class amba_chi_overflow_test extends amba_chi_base_test;
-  `uvm_component_utils(amba_chi_overflow_test)
+class amba_chi_snoop_orphan_test extends amba_chi_base_test;
+  `uvm_component_utils(amba_chi_snoop_orphan_test)
 
   function new(string name, uvm_component parent);
     super.new(name, parent);
   endfunction
 
-  function void build_phase(uvm_phase phase);
-    super.build_phase(phase);
-    cfg.master_cfg.max_outstanding = 1;
-  endfunction
-
   task run_phase(uvm_phase phase);
-    amba_chi_overflow_vseq vseq;
+    amba_chi_snoop_orphan_vseq vseq;
 
     phase.raise_objection(this);
-    vseq = amba_chi_overflow_vseq::type_id::create("vseq");
+    vseq = amba_chi_snoop_orphan_vseq::type_id::create("vseq");
     fork
       begin
         vseq.start(env.virtual_sequencer);

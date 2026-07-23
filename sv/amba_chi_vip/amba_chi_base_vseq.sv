@@ -1,7 +1,3 @@
-// Copyright lowRISC contributors (OpenTitan project).
-// Licensed under the Apache License, Version 2.0, see LICENSE for details.
-// SPDX-License-Identifier: Apache-2.0
-
 class amba_chi_base_vseq extends uvm_sequence;
   `uvm_object_utils(amba_chi_base_vseq)
   `uvm_declare_p_sequencer(amba_chi_virtual_sequencer)

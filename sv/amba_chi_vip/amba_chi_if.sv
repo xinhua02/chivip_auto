@@ -1,7 +1,3 @@
-// Copyright lowRISC contributors (OpenTitan project).
-// Licensed under the Apache License, Version 2.0, see LICENSE for details.
-// SPDX-License-Identifier: Apache-2.0
-
 interface amba_chi_if #(int unsigned ADDR_WIDTH = 64,
                         int unsigned DATA_WIDTH = 128) (
     input logic clk,

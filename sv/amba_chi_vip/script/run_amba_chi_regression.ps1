@@ -31,6 +31,16 @@ $tests = @(
     Match = 'UVM_ERROR\s*:\s*0'
   },
   @{
+    Name = 'amba_chi_snoop_burst_test'
+    ExpectPass = $true
+    Match = 'UVM_ERROR\s*:\s*0'
+  },
+  @{
+    Name = 'amba_chi_snoop_orphan_test'
+    ExpectPass = $false
+    Match = 'snoop txn_id=0x52ff has no matching request'
+  },
+  @{
     Name = 'amba_chi_reorder_test'
     ExpectPass = $false
     Match = 'response ordering violation'

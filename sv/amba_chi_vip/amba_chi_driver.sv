@@ -1,7 +1,3 @@
-// Copyright lowRISC contributors (OpenTitan project).
-// Licensed under the Apache License, Version 2.0, see LICENSE for details.
-// SPDX-License-Identifier: Apache-2.0
-
 class amba_chi_driver extends uvm_driver#(amba_chi_item);
   `uvm_component_utils(amba_chi_driver)
 
