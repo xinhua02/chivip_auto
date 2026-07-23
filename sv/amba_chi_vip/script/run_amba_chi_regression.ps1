@@ -36,6 +36,11 @@ $tests = @(
     Match = 'UVM_ERROR\s*:\s*0'
   },
   @{
+    Name = 'amba_chi_txn_coverage_test'
+    ExpectPass = $true
+    Match = 'UVM_ERROR\s*:\s*0'
+  },
+  @{
     Name = 'amba_chi_version_a_test'
     ExpectPass = $true
     Match = 'UVM_ERROR\s*:\s*0'
