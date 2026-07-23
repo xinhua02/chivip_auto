@@ -26,6 +26,8 @@ package amba_chi_env_pkg;
   `include "amba_chi_slave_reorder_seq.sv"
   `include "amba_chi_master_overflow_seq.sv"
   `include "amba_chi_slave_overflow_seq.sv"
+  `include "amba_chi_master_feature_matrix_seq.sv"
+  `include "amba_chi_slave_feature_matrix_seq.sv"
   `include "amba_chi_base_vseq.sv"
   `include "amba_chi_write_vseq.sv"
   `include "amba_chi_snoop_vseq.sv"
@@ -33,6 +35,7 @@ package amba_chi_env_pkg;
   `include "amba_chi_snoop_orphan_vseq.sv"
   `include "amba_chi_reorder_vseq.sv"
   `include "amba_chi_overflow_vseq.sv"
+  `include "amba_chi_feature_matrix_vseq.sv"
   `include "amba_chi_base_test.sv"
   `include "amba_chi_write_test.sv"
   `include "amba_chi_snoop_test.sv"
@@ -40,5 +43,6 @@ package amba_chi_env_pkg;
   `include "amba_chi_snoop_orphan_test.sv"
   `include "amba_chi_reorder_test.sv"
   `include "amba_chi_overflow_test.sv"
+  `include "amba_chi_feature_matrix_test.sv"
 
 endpackage

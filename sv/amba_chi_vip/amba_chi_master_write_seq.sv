@@ -13,6 +13,8 @@ class amba_chi_master_write_seq extends uvm_sequence#(amba_chi_item);
     req.channel = AMBA_CHI_CH_REQ;
     req.txn_id = 16'h2001;
     req.address = 64'h2000_0000;
+    req.src_id = 11'h002;
+    req.tgt_id = 11'h102;
     req.opcode = AMBA_CHI_REQ_WRITE_NO_SNP;
     start_item(req);
     finish_item(req);

@@ -23,10 +23,39 @@ class amba_chi_env_cov extends uvm_component;
     }
 
     cp_opcode: coverpoint item.opcode {
-      bins read_shared  = {AMBA_CHI_REQ_READ_SHARED};
-      bins read_excl    = {AMBA_CHI_REQ_READ_EXCL};
-      bins write_no_snp = {AMBA_CHI_REQ_WRITE_NO_SNP};
-      bins write_unique  = {AMBA_CHI_REQ_WRITE_UNIQUE};
+      bins read_base[] = {
+        AMBA_CHI_REQ_READ_SHARED,
+        AMBA_CHI_REQ_READ_EXCL,
+        AMBA_CHI_REQ_READ_ONCE,
+        AMBA_CHI_REQ_READ_UNIQUE,
+        AMBA_CHI_REQ_READ_CLEAN,
+        AMBA_CHI_REQ_READ_NOT_SHARED_DIRTY,
+        AMBA_CHI_REQ_READ_PERSIST
+      };
+      bins write_base[] = {
+        AMBA_CHI_REQ_WRITE_NO_SNP,
+        AMBA_CHI_REQ_WRITE_UNIQUE,
+        AMBA_CHI_REQ_WRITE_BACK_FULL,
+        AMBA_CHI_REQ_WRITE_CLEAN_FULL,
+        AMBA_CHI_REQ_WRITE_EVICT_FULL
+      };
+      bins maint[] = {
+        AMBA_CHI_REQ_CLEAN_SHARED,
+        AMBA_CHI_REQ_CLEAN_INVALID,
+        AMBA_CHI_REQ_MAKE_INVALID,
+        AMBA_CHI_REQ_EVICT
+      };
+      bins atomic[] = {
+        AMBA_CHI_REQ_ATOMIC_SWAP,
+        AMBA_CHI_REQ_ATOMIC_ADD,
+        AMBA_CHI_REQ_ATOMIC_CLR,
+        AMBA_CHI_REQ_ATOMIC_SET
+      };
+      bins dvm_prefetch[] = {
+        AMBA_CHI_REQ_DVM_OP,
+        AMBA_CHI_REQ_PREFETCH_TGT
+      };
+      bins stash[] = {AMBA_CHI_REQ_STASH_ONCE_SHARED};
     }
 
     cp_role: coverpoint item.role {
@@ -56,6 +85,7 @@ class amba_chi_env_cov extends uvm_component;
       bins compdb = {AMBA_CHI_RESP_COMPDB};
       bins retry  = {AMBA_CHI_RESP_RETRY};
       bins fail   = {AMBA_CHI_RESP_FAIL};
+      bins pcrd_grant = {AMBA_CHI_RESP_PCRD_GRANT};
     }
 
     cp_role: coverpoint item.role {
@@ -79,7 +109,20 @@ class amba_chi_env_cov extends uvm_component;
     }
 
     cp_snoop_type: coverpoint item.snoop_type {
-      bins any_type[] = {[0:255]};
+      bins read_snp[] = {
+        AMBA_CHI_SNOOP_READ_ONCE,
+        AMBA_CHI_SNOOP_READ_SHARED,
+        AMBA_CHI_SNOOP_READ_CLEAN,
+        AMBA_CHI_SNOOP_READ_NOT_SHARED_DIRTY,
+        AMBA_CHI_SNOOP_READ_UNIQUE
+      };
+      bins clean_inval[] = {
+        AMBA_CHI_SNOOP_MAKE_INVALID,
+        AMBA_CHI_SNOOP_CLEAN_SHARED,
+        AMBA_CHI_SNOOP_CLEAN_INVALID
+      };
+      bins dvm = {AMBA_CHI_SNOOP_DVM};
+      bins stash = {AMBA_CHI_SNOOP_STASH_ONCE_SHARED};
     }
 
     channel_cross: cross cp_channel, cp_data_count;
