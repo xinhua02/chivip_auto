@@ -1,4 +1,4 @@
-class amba_chi_slave_overflow_seq extends uvm_sequence#(amba_chi_item);
+class amba_chi_slave_overflow_seq extends amba_chi_slave_txn_lib_seq;
   `uvm_object_utils(amba_chi_slave_overflow_seq)
 
   function new(string name = "amba_chi_slave_overflow_seq");
@@ -6,6 +6,6 @@ class amba_chi_slave_overflow_seq extends uvm_sequence#(amba_chi_item);
   endfunction
 
   task body();
-    #200ns;
+    delay_ns(200ns);
   endtask
 endclass

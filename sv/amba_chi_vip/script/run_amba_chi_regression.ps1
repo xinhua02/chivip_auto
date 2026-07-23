@@ -104,7 +104,7 @@ if (Test-Path work) {
 
 & "$simRoot\vlib.exe" work | Out-Host
 
-$compileOutput = & "$simRoot\vlog.exe" -sv -L uvm -work work @sources 2>&1
+$compileOutput = & "$simRoot\vlog.exe" -sv -L uvm -work work +incdir+. +incdir+seq @sources 2>&1
 $compileLog = Join-Path $outputDir 'compile_regression.log'
 $compileOutput | Tee-Object -FilePath $compileLog | Out-Host
 if (Test-Path 'transcript') {

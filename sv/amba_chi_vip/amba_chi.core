@@ -19,36 +19,37 @@ filesets:
       - amba_chi_virtual_sequencer.sv: {is_include_file: true}
       - amba_chi_scoreboard.sv: {is_include_file: true}
       - amba_chi_env.sv: {is_include_file: true}
-      - amba_chi_master_base_seq.sv: {is_include_file: true}
-      - amba_chi_slave_base_seq.sv: {is_include_file: true}
-      - amba_chi_master_write_seq.sv: {is_include_file: true}
-      - amba_chi_slave_write_seq.sv: {is_include_file: true}
-      - amba_chi_master_snoop_seq.sv: {is_include_file: true}
-      - amba_chi_slave_snoop_seq.sv: {is_include_file: true}
-      - amba_chi_master_snoop_burst_seq.sv: {is_include_file: true}
-      - amba_chi_slave_snoop_burst_seq.sv: {is_include_file: true}
-      - amba_chi_master_snoop_orphan_seq.sv: {is_include_file: true}
-      - amba_chi_slave_snoop_orphan_seq.sv: {is_include_file: true}
-      - amba_chi_master_reorder_seq.sv: {is_include_file: true}
-      - amba_chi_slave_reorder_seq.sv: {is_include_file: true}
-      - amba_chi_master_overflow_seq.sv: {is_include_file: true}
-      - amba_chi_slave_overflow_seq.sv: {is_include_file: true}
-      - amba_chi_base_vseq.sv: {is_include_file: true}
-      - amba_chi_master_feature_matrix_seq.sv: {is_include_file: true}
-      - amba_chi_slave_feature_matrix_seq.sv: {is_include_file: true}
-      - amba_chi_master_version_matrix_seq.sv: {is_include_file: true}
-      - amba_chi_slave_version_matrix_seq.sv: {is_include_file: true}
-      - amba_chi_master_data_multibeat_seq.sv: {is_include_file: true}
-      - amba_chi_slave_data_multibeat_seq.sv: {is_include_file: true}
-      - amba_chi_write_vseq.sv: {is_include_file: true}
-      - amba_chi_snoop_vseq.sv: {is_include_file: true}
-      - amba_chi_snoop_burst_vseq.sv: {is_include_file: true}
-      - amba_chi_snoop_orphan_vseq.sv: {is_include_file: true}
-      - amba_chi_reorder_vseq.sv: {is_include_file: true}
-      - amba_chi_feature_matrix_vseq.sv: {is_include_file: true}
-      - amba_chi_version_matrix_vseq.sv: {is_include_file: true}
-      - amba_chi_data_multibeat_vseq.sv: {is_include_file: true}
-      - amba_chi_overflow_vseq.sv: {is_include_file: true}
+      - seq/amba_chi_txn_lib_seq.sv: {is_include_file: true}
+      - seq/amba_chi_master_base_seq.sv: {is_include_file: true}
+      - seq/amba_chi_slave_base_seq.sv: {is_include_file: true}
+      - seq/amba_chi_master_write_seq.sv: {is_include_file: true}
+      - seq/amba_chi_slave_write_seq.sv: {is_include_file: true}
+      - seq/amba_chi_master_snoop_seq.sv: {is_include_file: true}
+      - seq/amba_chi_slave_snoop_seq.sv: {is_include_file: true}
+      - seq/amba_chi_master_snoop_burst_seq.sv: {is_include_file: true}
+      - seq/amba_chi_slave_snoop_burst_seq.sv: {is_include_file: true}
+      - seq/amba_chi_master_snoop_orphan_seq.sv: {is_include_file: true}
+      - seq/amba_chi_slave_snoop_orphan_seq.sv: {is_include_file: true}
+      - seq/amba_chi_master_reorder_seq.sv: {is_include_file: true}
+      - seq/amba_chi_slave_reorder_seq.sv: {is_include_file: true}
+      - seq/amba_chi_master_overflow_seq.sv: {is_include_file: true}
+      - seq/amba_chi_slave_overflow_seq.sv: {is_include_file: true}
+      - seq/amba_chi_base_vseq.sv: {is_include_file: true}
+      - seq/amba_chi_master_feature_matrix_seq.sv: {is_include_file: true}
+      - seq/amba_chi_slave_feature_matrix_seq.sv: {is_include_file: true}
+      - seq/amba_chi_master_version_matrix_seq.sv: {is_include_file: true}
+      - seq/amba_chi_slave_version_matrix_seq.sv: {is_include_file: true}
+      - seq/amba_chi_master_data_multibeat_seq.sv: {is_include_file: true}
+      - seq/amba_chi_slave_data_multibeat_seq.sv: {is_include_file: true}
+      - seq/amba_chi_write_vseq.sv: {is_include_file: true}
+      - seq/amba_chi_snoop_vseq.sv: {is_include_file: true}
+      - seq/amba_chi_snoop_burst_vseq.sv: {is_include_file: true}
+      - seq/amba_chi_snoop_orphan_vseq.sv: {is_include_file: true}
+      - seq/amba_chi_reorder_vseq.sv: {is_include_file: true}
+      - seq/amba_chi_feature_matrix_vseq.sv: {is_include_file: true}
+      - seq/amba_chi_version_matrix_vseq.sv: {is_include_file: true}
+      - seq/amba_chi_data_multibeat_vseq.sv: {is_include_file: true}
+      - seq/amba_chi_overflow_vseq.sv: {is_include_file: true}
       - amba_chi_base_test.sv: {is_include_file: true}
       - amba_chi_write_test.sv: {is_include_file: true}
       - amba_chi_snoop_burst_test.sv: {is_include_file: true}
