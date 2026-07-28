@@ -22,49 +22,18 @@ class amba_chi_driver extends uvm_driver#(amba_chi_item);
 
     if (cfg.role == AMBA_CHI_ROLE_MASTER) begin
       vif.req_valid <= 1'b0;
-      vif.req_opcode <= '0;
-      vif.req_txn_id <= '0;
-      vif.req_addr <= '0;
-      vif.req_data <= '0;
-      vif.req_src_id <= '0;
-      vif.req_tgt_id <= '0;
-      vif.req_qos <= '0;
-      vif.req_txn_type <= '0;
-      vif.req_order <= '0;
-      vif.req_size <= '0;
-      vif.req_mem_attr <= '0;
-      vif.req_endian <= '0;
-      vif.req_allow_retry <= 1'b0;
-      vif.req_exp_comp_dbid <= 1'b0;
-      vif.req_trace_tag <= '0;
+      vif.req_flit <= '0;
       vif.resp_ready <= 1'b1;
       vif.data_ready <= 1'b1;
       vif.snoop_ready <= 1'b1;
     end else begin
       vif.req_ready <= 1'b1;
       vif.resp_valid <= 1'b0;
-      vif.resp_txn_id <= '0;
-      vif.resp_opcode <= '0;
-      vif.resp_status <= '0;
-      vif.resp_err <= '0;
-      vif.resp_dbid <= '0;
-      vif.resp_ccid <= '0;
-      vif.resp_trace_tag <= '0;
+      vif.resp_flit <= '0;
       vif.data_valid <= 1'b0;
-      vif.data_txn_id <= '0;
-      vif.data_id <= 1'b0;
-      vif.data_last <= 1'b1;
-      vif.data_poison <= 1'b0;
-      vif.data_be <= '1;
-      vif.data_dbid <= '0;
-      vif.data_ccid <= '0;
-      vif.data_trace_tag <= '0;
+      vif.data_flit <= '0;
       vif.snoop_valid <= 1'b0;
-      vif.snoop_txn_id <= '0;
-      vif.snoop_type <= '0;
-      vif.snoop_attr <= '0;
-      vif.snoop_fwd_nid <= '0;
-      vif.snoop_trace_tag <= '0;
+      vif.snoop_flit <= '0;
     end
 
     forever begin
@@ -79,21 +48,21 @@ class amba_chi_driver extends uvm_driver#(amba_chi_item);
     if (cfg.role == AMBA_CHI_ROLE_MASTER) begin
       case (item.channel)
         AMBA_CHI_CH_REQ: begin
-          vif.req_opcode <= item.opcode;
-          vif.req_txn_id <= item.txn_id;
-          vif.req_addr <= item.address;
-          vif.req_data <= item.data_words.size() > 0 ? item.data_words[0] : '0;
-          vif.req_src_id <= item.src_id;
-          vif.req_tgt_id <= item.tgt_id;
-          vif.req_qos <= item.qos;
-          vif.req_txn_type <= item.txn_type;
-          vif.req_order <= item.order;
-          vif.req_size <= item.size;
-          vif.req_mem_attr <= item.mem_attr;
-          vif.req_endian <= item.endian;
-          vif.req_allow_retry <= item.allow_retry;
-          vif.req_exp_comp_dbid <= item.exp_comp_dbid;
-          vif.req_trace_tag <= item.trace_tag;
+          vif.req_flit.opcode <= item.opcode;
+          vif.req_flit.txn_id <= item.txn_id;
+          vif.req_flit.addr <= item.address;
+          vif.req_flit.data <= item.data_words.size() > 0 ? item.data_words[0] : '0;
+          vif.req_flit.src_id <= item.src_id;
+          vif.req_flit.tgt_id <= item.tgt_id;
+          vif.req_flit.qos <= item.qos;
+          vif.req_flit.txn_type <= item.txn_type;
+          vif.req_flit.order <= item.order;
+          vif.req_flit.size <= item.size;
+          vif.req_flit.mem_attr <= item.mem_attr;
+          vif.req_flit.endian <= item.endian;
+          vif.req_flit.allow_retry <= item.allow_retry;
+          vif.req_flit.exp_comp_dbid <= item.exp_comp_dbid;
+          vif.req_flit.trace_tag <= item.trace_tag;
           vif.req_valid <= 1'b1;
           wait (vif.req_ready == 1'b1);
           @(posedge vif.clk);
@@ -106,39 +75,39 @@ class amba_chi_driver extends uvm_driver#(amba_chi_item);
     end else begin
       case (item.channel)
         AMBA_CHI_CH_RESP: begin
-          vif.resp_txn_id <= item.txn_id;
-          vif.resp_opcode <= item.resp_opcode;
-          vif.resp_status <= item.resp_status;
-          vif.resp_err <= item.resp_err;
-          vif.resp_dbid <= item.dbid;
-          vif.resp_ccid <= item.ccid;
-          vif.resp_trace_tag <= item.trace_tag;
+          vif.resp_flit.txn_id <= item.txn_id;
+          vif.resp_flit.opcode <= item.resp_opcode;
+          vif.resp_flit.status <= item.resp_status;
+          vif.resp_flit.err <= item.resp_err;
+          vif.resp_flit.dbid <= item.dbid;
+          vif.resp_flit.ccid <= item.ccid;
+          vif.resp_flit.trace_tag <= item.trace_tag;
           vif.resp_valid <= 1'b1;
           wait (vif.resp_ready == 1'b1);
           @(posedge vif.clk);
           vif.resp_valid <= 1'b0;
         end
         AMBA_CHI_CH_DATA: begin
-          vif.data_txn_id <= item.txn_id;
-          vif.data_payload <= item.data_words.size() > 0 ? item.data_words[0] : '0;
-          vif.data_id <= item.data_id;
-          vif.data_last <= item.data_last;
-          vif.data_poison <= item.data_poison;
-          vif.data_be <= item.data_be;
-          vif.data_dbid <= item.dbid;
-          vif.data_ccid <= item.ccid;
-          vif.data_trace_tag <= item.trace_tag;
+          vif.data_flit.txn_id <= item.txn_id;
+          vif.data_flit.payload <= item.data_words.size() > 0 ? item.data_words[0] : '0;
+          vif.data_flit.id <= item.data_id;
+          vif.data_flit.last <= item.data_last;
+          vif.data_flit.poison <= item.data_poison;
+          vif.data_flit.be <= item.data_be;
+          vif.data_flit.dbid <= item.dbid;
+          vif.data_flit.ccid <= item.ccid;
+          vif.data_flit.trace_tag <= item.trace_tag;
           vif.data_valid <= 1'b1;
           wait (vif.data_ready == 1'b1);
           @(posedge vif.clk);
           vif.data_valid <= 1'b0;
         end
         AMBA_CHI_CH_SNOOP: begin
-          vif.snoop_txn_id <= item.txn_id;
-          vif.snoop_type <= item.snoop_type;
-          vif.snoop_attr <= item.snoop_attr;
-          vif.snoop_fwd_nid <= item.fwd_nid;
-          vif.snoop_trace_tag <= item.trace_tag;
+          vif.snoop_flit.txn_id <= item.txn_id;
+          vif.snoop_flit.type_ <= item.snoop_type;
+          vif.snoop_flit.attr <= item.snoop_attr;
+          vif.snoop_flit.fwd_nid <= item.fwd_nid;
+          vif.snoop_flit.trace_tag <= item.trace_tag;
           vif.snoop_valid <= 1'b1;
           wait (vif.snoop_ready == 1'b1);
           @(posedge vif.clk);
