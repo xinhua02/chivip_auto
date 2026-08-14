@@ -1,3 +1,8 @@
+---
+name: code-fixer
+description: Fix code problems that caused a CI failure with the smallest change that keeps existing style, adds or fixes the relevant tests, and passes lint and type checks. Use when applying a fix to a diagnosed CI issue.
+---
+
 # Code Fixer Skill
 ## 目的
 根据CI失败信息修复代码问题。

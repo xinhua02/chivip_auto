@@ -24,6 +24,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.COPILOT_CLI_TOKEN }}
         run: |
+          $OutputEncoding = [System.Text.Encoding]::UTF8
+          [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+          chcp 65001 | Out-Null
           copilot -p "
               Use the ci-triage skill to analyze all failed CI runs from yesterday.
               For each auto-fixable issue:

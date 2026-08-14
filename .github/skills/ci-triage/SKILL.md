@@ -1,3 +1,8 @@
+---
+name: ci-triage
+description: Analyze failed CI / GitHub Actions runs to classify the failure (test, lint, build, dependency, other), determine the root cause, estimate fix difficulty, and decide whether it is auto-fixable. Use when triaging CI failures before attempting a fix.
+---
+
 # CI Triage Skill
 ## 目的
 分析CI失败日志，确定问题的根本原因和修复优先级。
