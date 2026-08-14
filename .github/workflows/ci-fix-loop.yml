@@ -1,0 +1,45 @@
+name: CI Fix Loop
+on:
+  schedule:
+    - cron: '0 10 * * *' # Run at 10:00 UTC every day
+  workflow_dispatch:
+jobs:
+  ci-fix-loop:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install GitHub Copilot CLI
+        run: npm install -g @github/copilot
+
+      - name: Run CI fix loop
+        env:
+          GITHUB_TOKEN: ${{ secrets.COPILOT_CLI_TOKEN }}
+        run: |
+          copilot -p "
+              Use the ci-triage skill to analyze all failed CI runs from yesterday.
+              For each auto-fixable issue:
+                1. Create a new branch
+                2. Spawn the ci-fixer subagent to fix the issue
+                3. Spawn the code-reviewer subagent to review the fix
+                4. If approved, open a PR with a clear description
+                5. Update STATE.md with the results
+              Write all findings and actions to STATE.md.
+          " --allow-all-tools
+
+      - name: Commit state changes
+        shell: bash
+        run: |
+          git config --local user.email "xinyi.huang@armchina.com"
+          git config --local user.name "AI Fix Bot"
+          git add STATE.md
+          git commit -m "Update CI fix loop state for $(date +%Y-%m-%d)" || true
+          git push
