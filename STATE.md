@@ -1,31 +1,49 @@
 # CI Triage State
 
-**Date:** 2026-08-14
+**Last Updated:** 2026-08-14T09:36:50Z
 
-## Summary
+---
 
-CI triage was initiated to analyze all failed CI runs from yesterday (2026-08-13).
+## Triage Run: 2026-08-14 (analyzing yesterday 2026-08-13)
 
-## Findings
+### Summary
 
-- **No failed CI runs found** from yesterday (2026-08-13).
-- Only one workflow exists in this repository: `CI Fix Loop`.
-- That workflow has a single run, created **2026-08-14T09:30:16Z**, currently **in progress** (run ID: 31788344691, branch: `main`).
-- No completed or failed runs were found in the repository's run history.
+CI triage skill loaded and `gh` CLI queried for all runs in `xinhua02/chivip_auto`.
 
-## Actions Taken
+### Findings
+
+| Field | Value |
+|-------|-------|
+| Triage date | 2026-08-14 |
+| Yesterday's date analyzed | 2026-08-13 |
+| Total runs found | 2 |
+| Runs from 2026-08-13 | 0 |
+| Failed runs from yesterday | **0** |
+| Auto-fixable issues | **0** |
+
+**Run history (all time):**
+
+| Run ID | Conclusion | Created At | Branch |
+|--------|------------|------------|--------|
+| 31788745629 | in_progress | 2026-08-14T09:35:53Z | main |
+| 31788344691 | success | 2026-08-14T09:30:16Z | main |
+
+**Workflow:** `CI Fix Loop` (`.github/workflows/ci-fix-loop.yml`) — only workflow in repo.
+
+### Actions Taken
 
 | Step | Status | Notes |
 |------|--------|-------|
-| CI triage skill invocation | ⚠️ Skipped | `ci-triage` skill not available; proceeded with `gh` CLI instead |
-| Fetch failed runs (yesterday) | ✅ Complete | 0 failed runs found |
-| Auto-fixable issue identification | N/A | No failures to analyze |
+| ci-triage skill load | ✅ Loaded | Skill context applied |
+| Fetch runs via `gh run list` | ✅ Complete | 2 runs found, 0 from yesterday |
+| Auto-fixable issue identification | N/A | No failures to process |
 | Branch creation | N/A | No fixes needed |
 | ci-fixer subagent | N/A | No fixes needed |
 | code-reviewer subagent | N/A | No review needed |
-| PR creation | N/A | No approved fixes |
+| PR creation | N/A | No approved fixes to merge |
 
-## Conclusion
+### Conclusion
 
-No auto-fixable issues were identified because there are no failed CI runs from yesterday.
-If CI fails in future runs, re-run triage to catch regressions.
+**No failed CI runs were found from yesterday (2026-08-13).** The repository's entire run history contains only 2 runs, both from 2026-08-14, and both are successful or in-progress. No auto-fixable issues were identified. No branches, PRs, or code changes were created.
+
+Re-run this workflow after a CI failure occurs to automatically triage and fix issues.
