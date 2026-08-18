@@ -88,6 +88,7 @@ filesets:
       - amba_chi_version_c_test.sv: {is_include_file: true}
       - amba_chi_version_d_test.sv: {is_include_file: true}
       - amba_chi_version_e_test.sv: {is_include_file: true}
+      - amba_chi_version_f_test.sv: {is_include_file: true}
       - amba_chi_data_multibeat_test.sv: {is_include_file: true}
       - amba_chi_retry_reissue_test.sv: {is_include_file: true}
       - amba_chi_ordering_positive_test.sv: {is_include_file: true}

@@ -6,6 +6,7 @@ class amba_chi_env_cfg extends uvm_object;
   bit en_cov = 1'b1;
   bit en_scoreboard = 1'b1;
   bit en_in_order_resp = 1'b0;
+  bit require_full_cov = 1'b0;
 
   function new(string name = "amba_chi_env_cfg");
     super.new(name);

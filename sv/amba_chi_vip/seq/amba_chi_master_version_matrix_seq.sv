@@ -48,6 +48,10 @@ class amba_chi_master_version_matrix_seq extends uvm_sequence#(amba_chi_item);
         send_req(16'hE101, 64'hE100_0000, AMBA_CHI_REQ_READ_PERSIST, 11'h015, 11'h105);
         send_req(16'hE102, 64'hE100_0040, AMBA_CHI_REQ_STASH_ONCE_SHARED, 11'h015, 11'h105);
       end
+      AMBA_CHI_VERSION_F: begin
+        send_req(16'hF101, 64'hF100_0000, AMBA_CHI_REQ_PREFETCH_TGT, 11'h016, 11'h106);
+        send_req(16'hF102, 64'hF100_0040, AMBA_CHI_REQ_READ_PERSIST, 11'h016, 11'h106);
+      end
       default: begin
         `uvm_fatal(get_type_name(), $sformatf("unsupported version %0d", version))
       end

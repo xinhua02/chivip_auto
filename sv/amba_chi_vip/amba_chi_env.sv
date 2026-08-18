@@ -48,6 +48,8 @@ class amba_chi_env extends uvm_env;
     end
 
     if (cov != null) begin
+      cov.cfg = cfg;
+      cov.vif = cfg.master_cfg.vif;
       master_agent.monitor.analysis_port.connect(cov.master_imp);
       slave_agent.monitor.analysis_port.connect(cov.slave_imp);
     end

@@ -8,7 +8,8 @@ package amba_chi_pkg;
     AMBA_CHI_VERSION_B = 3'd1,
     AMBA_CHI_VERSION_C = 3'd2,
     AMBA_CHI_VERSION_D = 3'd3,
-    AMBA_CHI_VERSION_E = 3'd4
+    AMBA_CHI_VERSION_E = 3'd4,
+    AMBA_CHI_VERSION_F = 3'd5
   } amba_chi_version_e;
 
   typedef enum bit {
@@ -75,6 +76,7 @@ package amba_chi_pkg;
   `include "rules/amba_chi_rules_vC.svh"
   `include "rules/amba_chi_rules_vD.svh"
   `include "rules/amba_chi_rules_vE.svh"
+  `include "rules/amba_chi_rules_vF.svh"
 
   function automatic bit [15:0] amba_chi_version_feature_mask(amba_chi_version_e version);
     case (version)
@@ -83,6 +85,7 @@ package amba_chi_pkg;
       AMBA_CHI_VERSION_C: return 16'h0007;
       AMBA_CHI_VERSION_D: return 16'h000F;
       AMBA_CHI_VERSION_E: return 16'h001F;
+      AMBA_CHI_VERSION_F: return 16'h003F;
       default:            return 16'h0000;
     endcase
   endfunction
@@ -259,6 +262,7 @@ package amba_chi_pkg;
       AMBA_CHI_VERSION_C: return amba_chi_supports_req_opcode_vC(opcode);
       AMBA_CHI_VERSION_D: return amba_chi_supports_req_opcode_vD(opcode);
       AMBA_CHI_VERSION_E: return amba_chi_supports_req_opcode_vE(opcode);
+      AMBA_CHI_VERSION_F: return amba_chi_supports_req_opcode_vF(opcode);
       default: return 1'b0;
     endcase
   endfunction
@@ -271,6 +275,7 @@ package amba_chi_pkg;
       AMBA_CHI_VERSION_C: return amba_chi_supports_snoop_type_vC(snoop);
       AMBA_CHI_VERSION_D: return amba_chi_supports_snoop_type_vD(snoop);
       AMBA_CHI_VERSION_E: return amba_chi_supports_snoop_type_vE(snoop);
+      AMBA_CHI_VERSION_F: return amba_chi_supports_snoop_type_vF(snoop);
       default: return 1'b0;
     endcase
   endfunction
@@ -481,7 +486,7 @@ package amba_chi_pkg;
 
     function new(string name = "amba_chi_cfg");
       super.new(name);
-      version = AMBA_CHI_VERSION_E;
+      version = AMBA_CHI_VERSION_F;
       role = AMBA_CHI_ROLE_MASTER;
       feature_mask = amba_chi_version_feature_mask(version);
       is_active_master = 1'b1;

@@ -98,6 +98,7 @@ package amba_chi_env_pkg;
   `include "amba_chi_version_c_test.sv"
   `include "amba_chi_version_d_test.sv"
   `include "amba_chi_version_e_test.sv"
+  `include "amba_chi_version_f_test.sv"
   `include "amba_chi_data_multibeat_test.sv"
 
 endpackage

@@ -40,6 +40,12 @@ class amba_chi_slave_version_matrix_seq extends amba_chi_slave_txn_lib_seq;
         send_resp("rsp_e1", 16'hE102, AMBA_CHI_RESP_COMP, AMBA_CHI_VERSION_E);
         send_snoop("snoop_e1", 16'hE102, AMBA_CHI_SNOOP_STASH_ONCE_SHARED, AMBA_CHI_VERSION_E);
       end
+      AMBA_CHI_VERSION_F: begin
+        send_resp("rsp_f0", 16'hF101, AMBA_CHI_RESP_PCRD_GRANT, AMBA_CHI_VERSION_F);
+        send_resp("rsp_f1", 16'hF102, AMBA_CHI_RESP_COMPDB, AMBA_CHI_VERSION_F, 6'h06, 4'h7);
+        send_data_beat("data_f1", 16'hF102, 32'hffff_f102, 4'd0, 1'b1, 16'hFFFF,
+                       AMBA_CHI_VERSION_F, 6'h06, 4'h7);
+      end
       default: begin
         `uvm_fatal(get_type_name(), $sformatf("unsupported version %0d", version))
       end

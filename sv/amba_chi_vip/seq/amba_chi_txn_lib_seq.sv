@@ -16,7 +16,11 @@ class amba_chi_master_txn_lib_seq extends uvm_sequence#(amba_chi_item);
       bit [31:0] payload = '0,
       bit has_payload_override = 1'b0,
       bit [1:0] pas = 2'b00,
-      bit [7:0] mecid = 8'h00
+      bit [7:0] mecid = 8'h00,
+      bit allow_retry = 1'b0,
+      bit exp_comp_dbid = 1'b0,
+      bit [2:0] order = 3'd0,
+      bit [1:0] endian = 2'b00
   );
     amba_chi_item req;
     bit has_payload;
@@ -34,6 +38,10 @@ class amba_chi_master_txn_lib_seq extends uvm_sequence#(amba_chi_item);
     req.opcode = opcode;
     req.pas = pas;
     req.mecid = mecid;
+    req.allow_retry = allow_retry;
+    req.exp_comp_dbid = exp_comp_dbid;
+    req.order = order;
+    req.endian = endian;
     if (has_payload) begin
       req.data_words.push_back(payload);
     end
@@ -60,7 +68,8 @@ class amba_chi_slave_txn_lib_seq extends uvm_sequence#(amba_chi_item);
       bit [7:0] resp_status = AMBA_CHI_RESP_COMP,
       amba_chi_version_e version = AMBA_CHI_VERSION_E,
       bit [5:0] dbid = '0,
-      bit [3:0] ccid = '0
+      bit [3:0] ccid = '0,
+      bit [2:0] resp_err = 3'd0
   );
     amba_chi_item rsp;
 
@@ -70,6 +79,7 @@ class amba_chi_slave_txn_lib_seq extends uvm_sequence#(amba_chi_item);
     rsp.channel = AMBA_CHI_CH_RESP;
     rsp.txn_id = txn_id;
     rsp.resp_status = resp_status;
+    rsp.resp_err = resp_err;
     rsp.dbid = dbid;
     rsp.ccid = ccid;
     start_item(rsp);
@@ -116,7 +126,9 @@ class amba_chi_slave_txn_lib_seq extends uvm_sequence#(amba_chi_item);
       string item_name,
       bit [15:0] txn_id,
       bit [7:0] snoop_type,
-      amba_chi_version_e version = AMBA_CHI_VERSION_E
+      amba_chi_version_e version = AMBA_CHI_VERSION_E,
+      bit [2:0] snoop_attr = 3'd0,
+      bit [10:0] fwd_nid = 11'h000
   );
     amba_chi_item snoop;
 
@@ -126,6 +138,8 @@ class amba_chi_slave_txn_lib_seq extends uvm_sequence#(amba_chi_item);
     snoop.channel = AMBA_CHI_CH_SNOOP;
     snoop.txn_id = txn_id;
     snoop.snoop_type = snoop_type;
+    snoop.snoop_attr = snoop_attr;
+    snoop.fwd_nid = fwd_nid;
     start_item(snoop);
     finish_item(snoop);
   endtask
