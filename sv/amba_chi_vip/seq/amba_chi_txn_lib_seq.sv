@@ -14,7 +14,9 @@ class amba_chi_master_txn_lib_seq extends uvm_sequence#(amba_chi_item);
       bit [10:0] tgt_id,
       amba_chi_version_e version = AMBA_CHI_VERSION_E,
       bit [31:0] payload = '0,
-      bit has_payload_override = 1'b0
+      bit has_payload_override = 1'b0,
+      bit [1:0] pas = 2'b00,
+      bit [7:0] mecid = 8'h00
   );
     amba_chi_item req;
     bit has_payload;
@@ -30,6 +32,8 @@ class amba_chi_master_txn_lib_seq extends uvm_sequence#(amba_chi_item);
     req.src_id = src_id;
     req.tgt_id = tgt_id;
     req.opcode = opcode;
+    req.pas = pas;
+    req.mecid = mecid;
     if (has_payload) begin
       req.data_words.push_back(payload);
     end
@@ -81,7 +85,11 @@ class amba_chi_slave_txn_lib_seq extends uvm_sequence#(amba_chi_item);
       bit [15:0] data_be = 16'hFFFF,
       amba_chi_version_e version = AMBA_CHI_VERSION_E,
       bit [5:0] dbid = '0,
-      bit [3:0] ccid = '0
+      bit [3:0] ccid = '0,
+      bit [1:0] pas = 2'b00,
+      bit [7:0] mecid = 8'h00,
+      bit mismatched_mecid = 1'b0,
+      bit data_poison = 1'b0
   );
     amba_chi_item data;
 
@@ -95,6 +103,10 @@ class amba_chi_slave_txn_lib_seq extends uvm_sequence#(amba_chi_item);
     data.data_be = data_be;
     data.dbid = dbid;
     data.ccid = ccid;
+    data.pas = pas;
+    data.mecid = mecid;
+    data.mismatched_mecid = mismatched_mecid;
+    data.data_poison = data_poison;
     data.data_words.push_back(payload);
     start_item(data);
     finish_item(data);

@@ -17,12 +17,10 @@ dozens of individual signals.
 
 ### Channels and Flit Types
 
-| Channel  | Handshake                   | Flit signal   | Flit type      |
-| -------- | --------------------------- | ------------- | -------------- |
-| Request  | `req_valid` / `req_ready`   | `req_flit`    | `req_flit_t`   |
-| Response | `resp_valid` / `resp_ready` | `resp_flit`   | `resp_flit_t`  |
-| Data     | `data_valid` / `data_ready` | `data_flit`   | `data_flit_t`  |
-| Snoop    | `snoop_valid`/`snoop_ready` | `snoop_flit`  | `snoop_flit_t` |
+- Request: `REQFLITPEND` / `REQFLITV` / `REQLCRDV`, flit `REQFLIT` (`req_flit_t`)
+- Response: `RSPFLITPEND` / `RSPFLITV` / `RSPLCRDV`, flit `RSPFLIT` (`resp_flit_t`)
+- Data: `DATFLITPEND` / `DATFLITV` / `DATLCRDV`, flit `DATFLIT` (`data_flit_t`)
+- Snoop: `SNPFLITPEND` / `SNPFLITV` / `SNPLCRDV`, flit `SNPFLIT` (`snoop_flit_t`)
 
 ### Flit Field Summary
 
@@ -38,7 +36,7 @@ dozens of individual signals.
 - `slave`: accepts request, drives response/data/snoop
 - `monitor`: observes all channels (all inputs)
 
-Access flit fields with dotted notation, e.g. `vif.req_flit.opcode`, `vif.data_flit.payload`.
+Access flit fields with dotted notation, e.g. `vif.REQFLIT.opcode`, `vif.DATFLIT.payload`.
 The [amba_chi_driver.sv](amba_chi_driver.sv) and [amba_chi_monitor.sv](amba_chi_monitor.sv)
 translate between flit fields and the `amba_chi_item` transaction object, so sequences,
 scoreboard, and coverage remain decoupled from the wire-level flit layout.

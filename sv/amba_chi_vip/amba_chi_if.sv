@@ -22,6 +22,8 @@ interface amba_chi_if #(int unsigned ADDR_WIDTH = 64,
     logic [1:0] endian;
     logic allow_retry;
     logic exp_comp_dbid;
+    logic [1:0] pas;
+    logic [7:0] mecid;
     logic [7:0] trace_tag;
   } req_flit_t;
 
@@ -50,6 +52,9 @@ interface amba_chi_if #(int unsigned ADDR_WIDTH = 64,
     logic [(DATA_WIDTH/8)-1:0] be;
     logic [5:0] dbid;
     logic [3:0] ccid;
+    logic [1:0] pas;
+    logic [7:0] mecid;
+    logic mismatched_mecid;
     logic [7:0] trace_tag;
   } data_flit_t;
 
@@ -64,74 +69,98 @@ interface amba_chi_if #(int unsigned ADDR_WIDTH = 64,
     logic [7:0] trace_tag;
   } snoop_flit_t;
 
+  // Link and low-power signals
+  logic TXLINKACTIVEREQ;
+  logic TXLINKACTIVEACK;
+  logic RXLINKACTIVEREQ;
+  logic RXLINKACTIVEACK;
+  logic TXSACTIVE;
+  logic RXSACTIVE;
+
   // Request channel
-  logic req_valid;
-  logic req_ready;
-  req_flit_t req_flit;
+  logic REQFLITPEND;
+  logic REQFLITV;
+  req_flit_t REQFLIT;
+  logic REQLCRDV;
 
   // Response channel
-  logic resp_valid;
-  logic resp_ready;
-  resp_flit_t resp_flit;
+  logic RSPFLITPEND;
+  logic RSPFLITV;
+  resp_flit_t RSPFLIT;
+  logic RSPLCRDV;
 
   // Data channel
-  logic data_valid;
-  logic data_ready;
-  data_flit_t data_flit;
+  logic DATFLITPEND;
+  logic DATFLITV;
+  data_flit_t DATFLIT;
+  logic DATLCRDV;
 
   // Snoop channel
-  logic snoop_valid;
-  logic snoop_ready;
-  snoop_flit_t snoop_flit;
+  logic SNPFLITPEND;
+  logic SNPFLITV;
+  snoop_flit_t SNPFLIT;
+  logic SNPLCRDV;
 
   modport master (
       input clk,
       input rst_n,
-      output req_valid,
-      input req_ready,
-      output req_flit,
-      input resp_valid,
-      output resp_ready,
-      input resp_flit,
-      input data_valid,
-      output data_ready,
-      input data_flit,
-      input snoop_valid,
-      output snoop_ready,
-      input snoop_flit
+      output REQFLITPEND,
+      output REQFLITV,
+      output REQFLIT,
+      input REQLCRDV,
+      input RSPFLITPEND,
+      input RSPFLITV,
+      input RSPFLIT,
+      output RSPLCRDV,
+      input DATFLITPEND,
+      input DATFLITV,
+      input DATFLIT,
+      output DATLCRDV,
+      input SNPFLITPEND,
+      input SNPFLITV,
+      input SNPFLIT,
+      output SNPLCRDV
   );
 
   modport slave (
       input clk,
       input rst_n,
-      input req_valid,
-      output req_ready,
-      input req_flit,
-      output resp_valid,
-      input resp_ready,
-      output resp_flit,
-      output data_valid,
-      input data_ready,
-      output data_flit,
-      output snoop_valid,
-      input snoop_ready,
-      output snoop_flit
+      input REQFLITPEND,
+      input REQFLITV,
+      input REQFLIT,
+      output REQLCRDV,
+      output RSPFLITPEND,
+      output RSPFLITV,
+      output RSPFLIT,
+      input RSPLCRDV,
+      output DATFLITPEND,
+      output DATFLITV,
+      output DATFLIT,
+      input DATLCRDV,
+      output SNPFLITPEND,
+      output SNPFLITV,
+      output SNPFLIT,
+      input SNPLCRDV
   );
 
   modport monitor (
       input clk,
       input rst_n,
-      input req_valid,
-      input req_ready,
-      input req_flit,
-      input resp_valid,
-      input resp_ready,
-      input resp_flit,
-      input data_valid,
-      input data_ready,
-      input data_flit,
-      input snoop_valid,
-      input snoop_ready,
-      input snoop_flit
+      input REQFLITPEND,
+      input REQFLITV,
+      input REQFLIT,
+      input REQLCRDV,
+      input RSPFLITPEND,
+      input RSPFLITV,
+      input RSPFLIT,
+      input RSPLCRDV,
+      input DATFLITPEND,
+      input DATFLITV,
+      input DATFLIT,
+      input DATLCRDV,
+      input SNPFLITPEND,
+      input SNPFLITV,
+      input SNPFLIT,
+      input SNPLCRDV
   );
 endinterface

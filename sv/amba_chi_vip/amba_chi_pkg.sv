@@ -297,6 +297,9 @@ package amba_chi_pkg;
     rand bit [2:0] resp_err;
     rand bit [5:0] dbid;
     rand bit [3:0] ccid;
+    rand bit [1:0] pas;
+    rand bit [7:0] mecid;
+    rand bit mismatched_mecid;
     rand bit [3:0] data_id;
     rand bit data_last;
     rand bit data_poison;
@@ -381,6 +384,9 @@ package amba_chi_pkg;
       `uvm_field_int(resp_err, UVM_DEFAULT)
       `uvm_field_int(dbid, UVM_DEFAULT)
       `uvm_field_int(ccid, UVM_DEFAULT)
+      `uvm_field_int(pas, UVM_DEFAULT)
+      `uvm_field_int(mecid, UVM_DEFAULT)
+      `uvm_field_int(mismatched_mecid, UVM_DEFAULT)
       `uvm_field_int(data_id, UVM_DEFAULT)
       `uvm_field_int(data_last, UVM_DEFAULT)
       `uvm_field_int(data_poison, UVM_DEFAULT)
@@ -409,6 +415,9 @@ package amba_chi_pkg;
       resp_err = '0;
       dbid = '0;
       ccid = '0;
+      pas = 2'b00;
+      mecid = 8'h00;
+      mismatched_mecid = 1'b0;
       data_id = 1'b0;
       data_last = 1'b1;
       data_poison = 1'b0;

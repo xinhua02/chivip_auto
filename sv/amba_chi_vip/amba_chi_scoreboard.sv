@@ -289,6 +289,17 @@ class amba_chi_scoreboard extends uvm_component;
                              item.txn_id, req.version, item.version))
       end
 
+      if (item.pas != req.pas) begin
+        `uvm_error(get_type_name(),
+                   $sformatf("data txn_id=0x%0h PAS mismatch: req=%0d data=%0d",
+                             item.txn_id, req.pas, item.pas))
+      end
+
+      if (item.mismatched_mecid && !item.data_poison) begin
+        `uvm_error(get_type_name(),
+                   $sformatf("data txn_id=0x%0h MECID mismatch must assert poison", item.txn_id))
+      end
+
       if (exp_data.exists(item.txn_id) && !exp_data[item.txn_id]) begin
         `uvm_error(get_type_name(),
                    $sformatf("data txn_id=0x%0h observed for request opcode 0x%0h that does not expect data",

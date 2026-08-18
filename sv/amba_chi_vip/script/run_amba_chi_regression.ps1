@@ -76,6 +76,61 @@ $tests = @(
     Match = 'UVM_ERROR\s*:\s*0'
   },
   @{
+    Name = 'amba_chi_retry_reissue_test'
+    ExpectPass = $true
+    Match = 'UVM_ERROR\s*:\s*0'
+  },
+  @{
+    Name = 'amba_chi_ordering_positive_test'
+    ExpectPass = $true
+    Match = 'UVM_ERROR\s*:\s*0'
+  },
+  @{
+    Name = 'amba_chi_snoop_type_matrix_test'
+    ExpectPass = $true
+    Match = 'UVM_ERROR\s*:\s*0'
+  },
+  @{
+    Name = 'amba_chi_poison_semantics_test'
+    ExpectPass = $true
+    Match = 'UVM_ERROR\s*:\s*0'
+  },
+  @{
+    Name = 'amba_chi_retry_reissue_bp_test'
+    ExpectPass = $true
+    Match = 'UVM_ERROR\s*:\s*0'
+  },
+  @{
+    Name = 'amba_chi_credit_recover_test'
+    ExpectPass = $true
+    Match = 'UVM_ERROR\s*:\s*0'
+  },
+  @{
+    Name = 'amba_chi_dvm_sync_nonsync_test'
+    ExpectPass = $true
+    Match = 'UVM_ERROR\s*:\s*0'
+  },
+  @{
+    Name = 'amba_chi_atomic_return_semantics_test'
+    ExpectPass = $true
+    Match = 'UVM_ERROR\s*:\s*0'
+  },
+  @{
+    Name = 'amba_chi_mecid_mismatch_resolution_test'
+    ExpectPass = $true
+    Match = 'UVM_ERROR\s*:\s*0'
+  },
+  @{
+    Name = 'amba_chi_linkactive_state_machine_test'
+    ExpectPass = $true
+    Match = 'UVM_ERROR\s*:\s*0'
+  },
+  @{
+    Name = 'amba_chi_sactive_linkactive_relationship_test'
+    ExpectPass = $true
+    Match = 'UVM_ERROR\s*:\s*0'
+  },
+  @{
     Name = 'amba_chi_snoop_orphan_test'
     ExpectPass = $false
     Match = 'snoop txn_id=0x52ff has no matching request'

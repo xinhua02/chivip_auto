@@ -34,6 +34,24 @@ filesets:
       - seq/amba_chi_slave_reorder_seq.sv: {is_include_file: true}
       - seq/amba_chi_master_overflow_seq.sv: {is_include_file: true}
       - seq/amba_chi_slave_overflow_seq.sv: {is_include_file: true}
+      - seq/amba_chi_master_retry_reissue_seq.sv: {is_include_file: true}
+      - seq/amba_chi_slave_retry_reissue_seq.sv: {is_include_file: true}
+      - seq/amba_chi_master_ordering_positive_seq.sv: {is_include_file: true}
+      - seq/amba_chi_slave_ordering_positive_seq.sv: {is_include_file: true}
+      - seq/amba_chi_master_snoop_type_matrix_seq.sv: {is_include_file: true}
+      - seq/amba_chi_slave_snoop_type_matrix_seq.sv: {is_include_file: true}
+      - seq/amba_chi_master_poison_semantics_seq.sv: {is_include_file: true}
+      - seq/amba_chi_slave_poison_semantics_seq.sv: {is_include_file: true}
+      - seq/amba_chi_master_retry_reissue_bp_seq.sv: {is_include_file: true}
+      - seq/amba_chi_slave_retry_reissue_bp_seq.sv: {is_include_file: true}
+      - seq/amba_chi_master_credit_recover_seq.sv: {is_include_file: true}
+      - seq/amba_chi_slave_credit_recover_seq.sv: {is_include_file: true}
+      - seq/amba_chi_master_dvm_sync_nonsync_seq.sv: {is_include_file: true}
+      - seq/amba_chi_slave_dvm_sync_nonsync_seq.sv: {is_include_file: true}
+      - seq/amba_chi_master_atomic_return_semantics_seq.sv: {is_include_file: true}
+      - seq/amba_chi_slave_atomic_return_semantics_seq.sv: {is_include_file: true}
+      - seq/amba_chi_master_mecid_mismatch_seq.sv: {is_include_file: true}
+      - seq/amba_chi_slave_mecid_mismatch_seq.sv: {is_include_file: true}
       - seq/amba_chi_base_vseq.sv: {is_include_file: true}
       - seq/amba_chi_master_feature_matrix_seq.sv: {is_include_file: true}
       - seq/amba_chi_slave_feature_matrix_seq.sv: {is_include_file: true}
@@ -46,6 +64,15 @@ filesets:
       - seq/amba_chi_snoop_burst_vseq.sv: {is_include_file: true}
       - seq/amba_chi_snoop_orphan_vseq.sv: {is_include_file: true}
       - seq/amba_chi_reorder_vseq.sv: {is_include_file: true}
+      - seq/amba_chi_retry_reissue_vseq.sv: {is_include_file: true}
+      - seq/amba_chi_ordering_positive_vseq.sv: {is_include_file: true}
+      - seq/amba_chi_snoop_type_matrix_vseq.sv: {is_include_file: true}
+      - seq/amba_chi_poison_semantics_vseq.sv: {is_include_file: true}
+      - seq/amba_chi_retry_reissue_bp_vseq.sv: {is_include_file: true}
+      - seq/amba_chi_credit_recover_vseq.sv: {is_include_file: true}
+      - seq/amba_chi_dvm_sync_nonsync_vseq.sv: {is_include_file: true}
+      - seq/amba_chi_atomic_return_semantics_vseq.sv: {is_include_file: true}
+      - seq/amba_chi_mecid_mismatch_resolution_vseq.sv: {is_include_file: true}
       - seq/amba_chi_feature_matrix_vseq.sv: {is_include_file: true}
       - seq/amba_chi_version_matrix_vseq.sv: {is_include_file: true}
       - seq/amba_chi_data_multibeat_vseq.sv: {is_include_file: true}
@@ -62,6 +89,17 @@ filesets:
       - amba_chi_version_d_test.sv: {is_include_file: true}
       - amba_chi_version_e_test.sv: {is_include_file: true}
       - amba_chi_data_multibeat_test.sv: {is_include_file: true}
+      - amba_chi_retry_reissue_test.sv: {is_include_file: true}
+      - amba_chi_ordering_positive_test.sv: {is_include_file: true}
+      - amba_chi_snoop_type_matrix_test.sv: {is_include_file: true}
+      - amba_chi_poison_semantics_test.sv: {is_include_file: true}
+      - amba_chi_retry_reissue_bp_test.sv: {is_include_file: true}
+      - amba_chi_credit_recover_test.sv: {is_include_file: true}
+      - amba_chi_dvm_sync_nonsync_test.sv: {is_include_file: true}
+      - amba_chi_atomic_return_semantics_test.sv: {is_include_file: true}
+      - amba_chi_mecid_mismatch_resolution_test.sv: {is_include_file: true}
+      - amba_chi_linkactive_state_machine_test.sv: {is_include_file: true}
+      - amba_chi_sactive_linkactive_relationship_test.sv: {is_include_file: true}
       - amba_chi_reorder_test.sv: {is_include_file: true}
       - amba_chi_overflow_test.sv: {is_include_file: true}
       - amba_chi_env_pkg.sv

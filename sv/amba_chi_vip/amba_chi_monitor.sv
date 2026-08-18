@@ -22,67 +22,72 @@ class amba_chi_monitor extends uvm_component;
 
     forever begin
       @(posedge vif.clk);
-      if (cfg.role == AMBA_CHI_ROLE_MASTER && vif.req_valid && vif.req_ready) begin
+      if (cfg.role == AMBA_CHI_ROLE_MASTER && vif.REQFLITV && vif.REQLCRDV) begin
         item = amba_chi_item::type_id::create("item");
         item.channel = AMBA_CHI_CH_REQ;
         item.role = AMBA_CHI_ROLE_MASTER;
         item.version = cfg.version;
-        item.txn_id = vif.req_flit.txn_id;
-        item.address = vif.req_flit.addr;
-        item.opcode = vif.req_flit.opcode;
-        item.src_id = vif.req_flit.src_id;
-        item.tgt_id = vif.req_flit.tgt_id;
-        item.qos = vif.req_flit.qos;
-        item.txn_type = vif.req_flit.txn_type;
-        item.order = vif.req_flit.order;
-        item.size = vif.req_flit.size;
-        item.mem_attr = vif.req_flit.mem_attr;
-        item.endian = vif.req_flit.endian;
-        item.allow_retry = vif.req_flit.allow_retry;
-        item.exp_comp_dbid = vif.req_flit.exp_comp_dbid;
-        item.trace_tag = vif.req_flit.trace_tag;
-        if (amba_chi_req_has_payload(vif.req_flit.opcode)) begin
-          item.data_words.push_back(vif.req_flit.data[31:0]);
+        item.txn_id = vif.REQFLIT.txn_id;
+        item.address = vif.REQFLIT.addr;
+        item.opcode = vif.REQFLIT.opcode;
+        item.src_id = vif.REQFLIT.src_id;
+        item.tgt_id = vif.REQFLIT.tgt_id;
+        item.qos = vif.REQFLIT.qos;
+        item.txn_type = vif.REQFLIT.txn_type;
+        item.order = vif.REQFLIT.order;
+        item.size = vif.REQFLIT.size;
+        item.mem_attr = vif.REQFLIT.mem_attr;
+        item.endian = vif.REQFLIT.endian;
+        item.allow_retry = vif.REQFLIT.allow_retry;
+        item.exp_comp_dbid = vif.REQFLIT.exp_comp_dbid;
+        item.pas = vif.REQFLIT.pas;
+        item.mecid = vif.REQFLIT.mecid;
+        item.trace_tag = vif.REQFLIT.trace_tag;
+        if (amba_chi_req_has_payload(vif.REQFLIT.opcode)) begin
+          item.data_words.push_back(vif.REQFLIT.data[31:0]);
         end
         analysis_port.write(item);
-      end else if (cfg.role == AMBA_CHI_ROLE_SLAVE && vif.resp_valid && vif.resp_ready) begin
+      end else if (cfg.role == AMBA_CHI_ROLE_SLAVE && vif.RSPFLITV && vif.RSPLCRDV) begin
         item = amba_chi_item::type_id::create("item");
         item.channel = AMBA_CHI_CH_RESP;
         item.role = AMBA_CHI_ROLE_SLAVE;
         item.version = cfg.version;
-        item.txn_id = vif.resp_flit.txn_id;
-        item.resp_opcode = vif.resp_flit.opcode;
-        item.resp_status = vif.resp_flit.status;
-        item.resp_err = vif.resp_flit.err;
-        item.dbid = vif.resp_flit.dbid;
-        item.ccid = vif.resp_flit.ccid;
-        item.trace_tag = vif.resp_flit.trace_tag;
+        item.txn_id = vif.RSPFLIT.txn_id;
+        item.resp_opcode = vif.RSPFLIT.opcode;
+        item.resp_status = vif.RSPFLIT.status;
+        item.resp_err = vif.RSPFLIT.err;
+        item.dbid = vif.RSPFLIT.dbid;
+        item.ccid = vif.RSPFLIT.ccid;
+        item.trace_tag = vif.RSPFLIT.trace_tag;
         analysis_port.write(item);
-      end else if (cfg.role == AMBA_CHI_ROLE_SLAVE && vif.data_valid && vif.data_ready) begin
+      end else if (cfg.role == AMBA_CHI_ROLE_SLAVE && vif.DATFLITV && vif.DATLCRDV) begin
         item = amba_chi_item::type_id::create("item");
         item.channel = AMBA_CHI_CH_DATA;
         item.role = AMBA_CHI_ROLE_SLAVE;
         item.version = cfg.version;
-        item.txn_id = vif.data_flit.txn_id;
-        item.data_words.push_back(vif.data_flit.payload[31:0]);
-        item.data_id = vif.data_flit.id;
-        item.data_last = vif.data_flit.last;
-        item.data_poison = vif.data_flit.poison;
-        item.data_be = vif.data_flit.be;
-        item.dbid = vif.data_flit.dbid;
-        item.ccid = vif.data_flit.ccid;
-        item.trace_tag = vif.data_flit.trace_tag;
+        item.txn_id = vif.DATFLIT.txn_id;
+        item.data_words.push_back(vif.DATFLIT.payload[31:0]);
+        item.data_id = vif.DATFLIT.id;
+        item.data_last = vif.DATFLIT.last;
+        item.data_poison = vif.DATFLIT.poison;
+        item.data_be = vif.DATFLIT.be;
+        item.dbid = vif.DATFLIT.dbid;
+        item.ccid = vif.DATFLIT.ccid;
+        item.pas = vif.DATFLIT.pas;
+        item.mecid = vif.DATFLIT.mecid;
+        item.mismatched_mecid = vif.DATFLIT.mismatched_mecid;
+        item.trace_tag = vif.DATFLIT.trace_tag;
         analysis_port.write(item);
-      end else if (cfg.role == AMBA_CHI_ROLE_SLAVE && vif.snoop_valid && vif.snoop_ready) begin
+      end else if (cfg.role == AMBA_CHI_ROLE_SLAVE && vif.SNPFLITV && vif.SNPLCRDV) begin
         item = amba_chi_item::type_id::create("item");
         item.channel = AMBA_CHI_CH_SNOOP;
         item.role = AMBA_CHI_ROLE_SLAVE;
         item.version = cfg.version;
-        item.txn_id = vif.snoop_flit.txn_id;
-        item.snoop_type = vif.snoop_flit.type_;
-        item.snoop_attr = vif.snoop_flit.attr;
-        item.fwd_nid = vif.snoop_flit.fwd_nid;
-        item.trace_tag = vif.snoop_flit.trace_tag;
+        item.txn_id = vif.SNPFLIT.txn_id;
+        item.snoop_type = vif.SNPFLIT.type_;
+        item.snoop_attr = vif.SNPFLIT.attr;
+        item.fwd_nid = vif.SNPFLIT.fwd_nid;
+        item.trace_tag = vif.SNPFLIT.trace_tag;
         analysis_port.write(item);
       end
     end
