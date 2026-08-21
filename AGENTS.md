@@ -49,9 +49,9 @@ Do not treat negative-test FAIL as regression failure if match signatures are pr
 - Preserve one-class-per-file and package include ordering used by the CHI VIP fileset in [sv/amba_chi_vip/amba_chi.core](sv/amba_chi_vip/amba_chi.core).
 - Keep top testbench naming consistent with style guide expectations: tb module in [sv/amba_chi_vip/tb.sv](sv/amba_chi_vip/tb.sv).
 - Prefer role-aware changes (master/slave symmetry) across:
-  - driver: [sv/amba_chi_vip/amba_chi_driver.sv](sv/amba_chi_vip/amba_chi_driver.sv)
-  - monitor: [sv/amba_chi_vip/amba_chi_monitor.sv](sv/amba_chi_vip/amba_chi_monitor.sv)
-  - scoreboard: [sv/amba_chi_vip/amba_chi_scoreboard.sv](sv/amba_chi_vip/amba_chi_scoreboard.sv)
+  - driver: [sv/amba_chi_vip/agent/amba_chi_driver.sv](sv/amba_chi_vip/agent/amba_chi_driver.sv)
+  - monitor: [sv/amba_chi_vip/agent/amba_chi_monitor.sv](sv/amba_chi_vip/agent/amba_chi_monitor.sv)
+  - scoreboard: [sv/amba_chi_vip/env/amba_chi_scoreboard.sv](sv/amba_chi_vip/env/amba_chi_scoreboard.sv)
 
 ## Common Pitfalls
 

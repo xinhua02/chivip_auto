@@ -8,6 +8,16 @@ class amba_chi_driver extends uvm_driver#(amba_chi_item);
     super.new(name, parent);
   endfunction
 
+  protected function int unsigned get_channel_delay_cycles(amba_chi_channel_e channel);
+    case (channel)
+      AMBA_CHI_CH_REQ: return cfg.req_channel_delay_cycles;
+      AMBA_CHI_CH_RESP: return cfg.rsp_channel_delay_cycles;
+      AMBA_CHI_CH_DATA: return cfg.dat_channel_delay_cycles;
+      AMBA_CHI_CH_SNOOP: return cfg.snp_channel_delay_cycles;
+      default: return 0;
+    endcase
+  endfunction
+
   virtual task run_phase(uvm_phase phase);
     amba_chi_item req;
 
@@ -48,7 +58,14 @@ class amba_chi_driver extends uvm_driver#(amba_chi_item);
   endtask
 
   protected virtual task drive_item(amba_chi_item item);
+    int unsigned delay_cycles;
+
     @(posedge vif.clk);
+    delay_cycles = get_channel_delay_cycles(item.channel);
+    repeat (delay_cycles) begin
+      @(posedge vif.clk);
+    end
+
     if (cfg.role == AMBA_CHI_ROLE_MASTER) begin
       case (item.channel)
         AMBA_CHI_CH_REQ: begin

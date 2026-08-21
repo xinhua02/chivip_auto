@@ -22,7 +22,8 @@ class amba_chi_monitor extends uvm_component;
 
     forever begin
       @(posedge vif.clk);
-      if (cfg.role == AMBA_CHI_ROLE_MASTER && vif.REQFLITV && vif.REQLCRDV) begin
+        if (cfg.role == AMBA_CHI_ROLE_MASTER &&
+          vif.REQFLITPEND && vif.REQFLITV && vif.REQLCRDV) begin
         item = amba_chi_item::type_id::create("item");
         item.channel = AMBA_CHI_CH_REQ;
         item.role = AMBA_CHI_ROLE_MASTER;
@@ -47,7 +48,8 @@ class amba_chi_monitor extends uvm_component;
           item.data_words.push_back(vif.REQFLIT.data[31:0]);
         end
         analysis_port.write(item);
-      end else if (cfg.role == AMBA_CHI_ROLE_SLAVE && vif.RSPFLITV && vif.RSPLCRDV) begin
+      end else if (cfg.role == AMBA_CHI_ROLE_SLAVE &&
+           vif.RSPFLITPEND && vif.RSPFLITV && vif.RSPLCRDV) begin
         item = amba_chi_item::type_id::create("item");
         item.channel = AMBA_CHI_CH_RESP;
         item.role = AMBA_CHI_ROLE_SLAVE;
@@ -60,7 +62,8 @@ class amba_chi_monitor extends uvm_component;
         item.ccid = vif.RSPFLIT.ccid;
         item.trace_tag = vif.RSPFLIT.trace_tag;
         analysis_port.write(item);
-      end else if (cfg.role == AMBA_CHI_ROLE_SLAVE && vif.DATFLITV && vif.DATLCRDV) begin
+      end else if (cfg.role == AMBA_CHI_ROLE_SLAVE &&
+           vif.DATFLITPEND && vif.DATFLITV && vif.DATLCRDV) begin
         item = amba_chi_item::type_id::create("item");
         item.channel = AMBA_CHI_CH_DATA;
         item.role = AMBA_CHI_ROLE_SLAVE;
@@ -78,7 +81,8 @@ class amba_chi_monitor extends uvm_component;
         item.mismatched_mecid = vif.DATFLIT.mismatched_mecid;
         item.trace_tag = vif.DATFLIT.trace_tag;
         analysis_port.write(item);
-      end else if (cfg.role == AMBA_CHI_ROLE_SLAVE && vif.SNPFLITV && vif.SNPLCRDV) begin
+      end else if (cfg.role == AMBA_CHI_ROLE_SLAVE &&
+           vif.SNPFLITPEND && vif.SNPFLITV && vif.SNPLCRDV) begin
         item = amba_chi_item::type_id::create("item");
         item.channel = AMBA_CHI_CH_SNOOP;
         item.role = AMBA_CHI_ROLE_SLAVE;

@@ -452,6 +452,10 @@ package amba_chi_pkg;
     rand int unsigned max_data_latency_cycles;
     rand int unsigned max_snoop_latency_cycles;
     rand int unsigned max_data_beats;
+    rand int unsigned req_channel_delay_cycles;
+    rand int unsigned rsp_channel_delay_cycles;
+    rand int unsigned dat_channel_delay_cycles;
+    rand int unsigned snp_channel_delay_cycles;
     rand bit en_strict_timing;
     rand bit en_strict_semantics;
     virtual amba_chi_if vif;
@@ -467,6 +471,10 @@ package amba_chi_pkg;
       max_data_latency_cycles inside {[1:4096]};
       max_snoop_latency_cycles inside {[1:4096]};
       max_data_beats inside {[1:64]};
+      req_channel_delay_cycles inside {[0:1024]};
+      rsp_channel_delay_cycles inside {[0:1024]};
+      dat_channel_delay_cycles inside {[0:1024]};
+      snp_channel_delay_cycles inside {[0:1024]};
     }
 
     `uvm_object_utils_begin(amba_chi_cfg)
@@ -480,6 +488,10 @@ package amba_chi_pkg;
       `uvm_field_int(max_data_latency_cycles, UVM_DEFAULT)
       `uvm_field_int(max_snoop_latency_cycles, UVM_DEFAULT)
       `uvm_field_int(max_data_beats, UVM_DEFAULT)
+      `uvm_field_int(req_channel_delay_cycles, UVM_DEFAULT)
+      `uvm_field_int(rsp_channel_delay_cycles, UVM_DEFAULT)
+      `uvm_field_int(dat_channel_delay_cycles, UVM_DEFAULT)
+      `uvm_field_int(snp_channel_delay_cycles, UVM_DEFAULT)
       `uvm_field_int(en_strict_timing, UVM_DEFAULT)
       `uvm_field_int(en_strict_semantics, UVM_DEFAULT)
     `uvm_object_utils_end
@@ -497,6 +509,10 @@ package amba_chi_pkg;
       max_data_latency_cycles = 256;
       max_snoop_latency_cycles = 256;
       max_data_beats = 16;
+      req_channel_delay_cycles = 0;
+      rsp_channel_delay_cycles = 0;
+      dat_channel_delay_cycles = 0;
+      snp_channel_delay_cycles = 0;
       en_strict_timing = 1'b1;
       en_strict_semantics = 1'b1;
     endfunction

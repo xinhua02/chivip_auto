@@ -37,21 +37,19 @@ dozens of individual signals.
 - `monitor`: observes all channels (all inputs)
 
 Access flit fields with dotted notation, e.g. `vif.REQFLIT.opcode`, `vif.DATFLIT.payload`.
-The [amba_chi_driver.sv](amba_chi_driver.sv) and [amba_chi_monitor.sv](amba_chi_monitor.sv)
+The [agent/amba_chi_driver.sv](agent/amba_chi_driver.sv) and [agent/amba_chi_monitor.sv](agent/amba_chi_monitor.sv)
 translate between flit fields and the `amba_chi_item` transaction object, so sequences,
 scoreboard, and coverage remain decoupled from the wire-level flit layout.
 
 ## Component Layout
 
-| File                                                 | Role                                    |
-| ---------------------------------------------------- | --------------------------------------- |
-| [amba_chi_if.sv](amba_chi_if.sv)                     | Flit-based DUT interface + modports     |
-| [amba_chi_pkg.sv](amba_chi_pkg.sv)                   | Shared types, enums, protocol helpers   |
-| [amba_chi_driver.sv](amba_chi_driver.sv)             | Role-aware flit driver                  |
-| [amba_chi_monitor.sv](amba_chi_monitor.sv)           | Flit sampler to `amba_chi_item`         |
-| [amba_chi_scoreboard.sv](amba_chi_scoreboard.sv)     | Protocol + ordering checks              |
-| [amba_chi_env.sv](amba_chi_env.sv)                   | Paired master/slave environment         |
-| [tb.sv](tb.sv)                                       | Top testbench wiring clock/reset/config |
+- [amba_chi_if.sv](amba_chi_if.sv): Flit-based DUT interface + modports
+- [amba_chi_pkg.sv](amba_chi_pkg.sv): Shared types, enums, protocol helpers
+- [agent/amba_chi_driver.sv](agent/amba_chi_driver.sv): Role-aware flit driver
+- [agent/amba_chi_monitor.sv](agent/amba_chi_monitor.sv): Flit sampler to `amba_chi_item`
+- [env/amba_chi_scoreboard.sv](env/amba_chi_scoreboard.sv): Protocol + ordering checks
+- [env/amba_chi_env.sv](env/amba_chi_env.sv): Paired master/slave environment
+- [tb.sv](tb.sv): Top testbench wiring clock/reset/config
 
 ## Build and Run
 

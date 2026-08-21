@@ -18,10 +18,10 @@ vlib work
 vlog -sv -L uvm -work work \
   amba_chi_if.sv \
   amba_chi_pkg.sv \
-  amba_chi_agent_pkg.sv \
+  agent/amba_chi_agent_pkg.sv \
   amba_chi_master_pkg.sv \
   amba_chi_slave_pkg.sv \
-  amba_chi_env_pkg.sv \
+  env/amba_chi_env_pkg.sv \
   amba_chi_test_pkg.sv \
   tb.sv
 
