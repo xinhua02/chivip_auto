@@ -8,7 +8,8 @@ class amba_chi_master_version_matrix_seq extends uvm_sequence#(amba_chi_item);
   endfunction
 
   protected task send_req(bit [15:0] txn_id, bit [63:0] addr, bit [7:0] opcode,
-                          bit [10:0] src_id, bit [10:0] tgt_id);
+                          bit [10:0] src_id, bit [10:0] tgt_id,
+                          bit allow_retry = 1'b0);
     amba_chi_item req;
     req = amba_chi_item::type_id::create($sformatf("req_%0h", txn_id));
     req.version = version;
@@ -19,6 +20,7 @@ class amba_chi_master_version_matrix_seq extends uvm_sequence#(amba_chi_item);
     req.src_id = src_id;
     req.tgt_id = tgt_id;
     req.opcode = opcode;
+    req.allow_retry = allow_retry;
     if (amba_chi_req_has_payload(opcode)) begin
       req.data_words.push_back(32'ha5a5_0000 | txn_id);
     end
@@ -49,7 +51,7 @@ class amba_chi_master_version_matrix_seq extends uvm_sequence#(amba_chi_item);
         send_req(16'hE102, 64'hE100_0040, AMBA_CHI_REQ_STASH_ONCE_SHARED, 11'h015, 11'h105);
       end
       AMBA_CHI_VERSION_F: begin
-        send_req(16'hF101, 64'hF100_0000, AMBA_CHI_REQ_PREFETCH_TGT, 11'h016, 11'h106);
+        send_req(16'hF101, 64'hF100_0000, AMBA_CHI_REQ_PREFETCH_TGT, 11'h016, 11'h106, 1'b1);
         send_req(16'hF102, 64'hF100_0040, AMBA_CHI_REQ_READ_PERSIST, 11'h016, 11'h106);
       end
       default: begin

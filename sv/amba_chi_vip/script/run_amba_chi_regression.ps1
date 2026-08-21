@@ -1,3 +1,8 @@
+param(
+  [switch]$EnableDelayMatrix = $false,
+  [switch]$MatrixSmokeOnly = $false
+)
+
 $ErrorActionPreference = 'Stop'
 
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -136,6 +141,16 @@ $tests = @(
     Match = 'UVM_ERROR\s*:\s*0'
   },
   @{
+    Name = 'amba_chi_retry_pair_incomplete_test'
+    ExpectPass = $false
+    Match = 'retry pair incomplete'
+  },
+  @{
+    Name = 'amba_chi_retry_early_resend_test'
+    ExpectPass = $false
+    Match = 'retry resend window closed'
+  },
+  @{
     Name = 'amba_chi_snoop_orphan_test'
     ExpectPass = $false
     Match = 'snoop txn_id=0x52ff has no matching request'
@@ -152,13 +167,45 @@ $tests = @(
   }
 )
 
+$delayProfiles = @(
+  @{
+    Name = 'd0000'
+    Req  = 0
+    Rsp  = 0
+    Dat  = 0
+    Snp  = 0
+  }
+)
+
+if ($EnableDelayMatrix) {
+  $delayProfiles += @{
+    Name = 'd2314'
+    Req  = 2
+    Rsp  = 3
+    Dat  = 1
+    Snp  = 4
+  }
+  $delayProfiles += @{
+    Name = 'd6666'
+    Req  = 6
+    Rsp  = 6
+    Dat  = 6
+    Snp  = 6
+  }
+}
+
+if ($MatrixSmokeOnly) {
+  $smokeSet = @('amba_chi_base_test', 'amba_chi_write_test', 'amba_chi_snoop_test')
+  $tests = $tests | Where-Object { $smokeSet -contains $_.Name }
+}
+
 $sources = @(
   'amba_chi_if.sv',
   'amba_chi_pkg.sv',
-  'amba_chi_agent_pkg.sv',
+  'agent/amba_chi_agent_pkg.sv',
   'amba_chi_master_pkg.sv',
   'amba_chi_slave_pkg.sv',
-  'amba_chi_env_pkg.sv',
+  'env/amba_chi_env_pkg.sv',
   'amba_chi_test_pkg.sv',
   'tb.sv'
 )
@@ -181,35 +228,49 @@ if ($LASTEXITCODE -ne 0) {
 
 $summary = @()
 
-foreach ($test in $tests) {
-  $stamp = Get-Date -Format 'yyyyMMdd_HHmmss'
-  $wlfName = "{0}_{1}.wlf" -f $test.Name, $stamp
-  $logName = "{0}_{1}.log" -f $test.Name, $stamp
-  $wlf = Join-Path $outputDir $wlfName
-  $log = Join-Path $outputDir $logName
+foreach ($delay in $delayProfiles) {
+  foreach ($test in $tests) {
+    $stamp = Get-Date -Format 'yyyyMMdd_HHmmss'
+    $wlfName = "{0}_{1}_{2}.wlf" -f $test.Name, $delay.Name, $stamp
+    $logName = "{0}_{1}_{2}.log" -f $test.Name, $delay.Name, $stamp
+    $wlf = Join-Path $outputDir $wlfName
+    $log = Join-Path $outputDir $logName
 
-  $simOutput = & "$simRoot\vsim.exe" -c -L mtiUvm -sv_seed random -wlf $wlf work.tb "+UVM_TESTNAME=$($test.Name)" -do "log -r /*; add wave -r /*; run -all; quit -f" 2>&1
-  $simOutput | Tee-Object -FilePath $log | Out-Host
-  if (Test-Path 'transcript') {
-    Move-Item -Force 'transcript' (Join-Path $outputDir ("{0}_{1}.transcript" -f $test.Name, $stamp))
-  }
+    $simOutput = & "$simRoot\vsim.exe" -c -L mtiUvm -sv_seed random -wlf $wlf work.tb "+UVM_TESTNAME=$($test.Name)" "+REQ_DELAY=$($delay.Req)" "+RSP_DELAY=$($delay.Rsp)" "+DAT_DELAY=$($delay.Dat)" "+SNP_DELAY=$($delay.Snp)" -do "log -r /*; add wave -r /*; run -all; quit -f" 2>&1
+    $simOutput | Tee-Object -FilePath $log | Out-Host
+    if (Test-Path 'transcript') {
+      Move-Item -Force 'transcript' (Join-Path $outputDir ("{0}_{1}_{2}.transcript" -f $test.Name, $delay.Name, $stamp))
+    }
 
-  $matched = Select-String -Path $log -Pattern $test.Match -Quiet
-  $isCleanPass = Select-String -Path $log -Pattern 'UVM_ERROR\s*:\s*0' -Quiet
-  $observed = if ($isCleanPass) { 'PASS' } else { 'FAIL' }
-  $asExpected = if ($test.ExpectPass) {
-    $observed -eq 'PASS'
-  } else {
-    ($observed -eq 'FAIL') -and $matched
-  }
+    $matched = Select-String -Path $log -Pattern $test.Match -Quiet
+    $isCleanPass = Select-String -Path $log -Pattern 'UVM_ERROR\s*:\s*0' -Quiet
+    $observed = if ($isCleanPass) { 'PASS' } else { 'FAIL' }
+    $asExpected = if ($test.ExpectPass) {
+      $observed -eq 'PASS'
+    } else {
+      ($observed -eq 'FAIL') -and $matched
+    }
 
-  $summary += [pscustomobject]@{
-    Test = $test.Name
-    Expected = if ($test.ExpectPass) { 'PASS' } else { 'FAIL' }
-    Observed = $observed
-    AsExpected = if ($asExpected) { 'PASS' } else { 'FAIL' }
-    Wave = $wlfName
-    Log = $logName
+    $timeNs = ''
+    $timeLine = Select-String -Path $log -Pattern 'Time:\s*([0-9]+)\s*ns' | Select-Object -Last 1
+    if ($timeLine -and $timeLine.Matches.Count -gt 0) {
+      $timeNs = $timeLine.Matches[0].Groups[1].Value
+    }
+
+    $summary += [pscustomobject]@{
+      Profile = $delay.Name
+      ReqDelay = $delay.Req
+      RspDelay = $delay.Rsp
+      DatDelay = $delay.Dat
+      SnpDelay = $delay.Snp
+      Test = $test.Name
+      Expected = if ($test.ExpectPass) { 'PASS' } else { 'FAIL' }
+      Observed = $observed
+      AsExpected = if ($asExpected) { 'PASS' } else { 'FAIL' }
+      TimeNs = $timeNs
+      Wave = $wlfName
+      Log = $logName
+    }
   }
 }
 

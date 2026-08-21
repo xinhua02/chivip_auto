@@ -11,17 +11,20 @@ class amba_chi_slave_feature_matrix_seq extends amba_chi_slave_txn_lib_seq;
     delay_ns(30ns);
 
     foreach (txn_ids[i]) begin
-      send_resp($sformatf("rsp_%0d", i), txn_ids[i],
-                (i == 3) ? AMBA_CHI_RESP_PCRD_GRANT : AMBA_CHI_RESP_COMP);
+      if (i == 3) begin
+        send_resp($sformatf("rsp_retry_%0d", i), txn_ids[i], AMBA_CHI_RESP_RETRY);
+        send_resp($sformatf("rsp_pcrd_%0d", i), txn_ids[i], AMBA_CHI_RESP_PCRD_GRANT);
+      end else if (i == 5) begin
+        send_snoop($sformatf("snoop_%0d", i), txn_ids[i], AMBA_CHI_SNOOP_STASH_ONCE_SHARED);
+        send_resp($sformatf("rsp_%0d", i), txn_ids[i], AMBA_CHI_RESP_COMP);
+      end else begin
+        send_resp($sformatf("rsp_%0d", i), txn_ids[i], AMBA_CHI_RESP_COMP);
+      end
 
       if (i == 0 || i == 2 || i == 4) begin
         send_data_beat($sformatf("data_%0d", i), txn_ids[i], 32'hde00_0000 + i, 4'd0, 1'b1);
       end
 
-      if (i == 3 || i == 5) begin
-        send_snoop($sformatf("snoop_%0d", i), txn_ids[i],
-                   (i == 3) ? AMBA_CHI_SNOOP_DVM : AMBA_CHI_SNOOP_STASH_ONCE_SHARED);
-      end
     end
   endtask
 endclass

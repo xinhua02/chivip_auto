@@ -24,6 +24,7 @@ class amba_chi_slave_txn_coverage_seq extends amba_chi_slave_txn_lib_seq;
     send_resp("rsp3", 16'h7003, AMBA_CHI_RESP_COMP, AMBA_CHI_VERSION_E, '0, '0, 3'd3);
     send_resp("rsp4", 16'h7004, AMBA_CHI_RESP_COMP);
     send_resp("rsp5", 16'h7005, AMBA_CHI_RESP_RETRY);
+    send_resp("rsp5_pcrd", 16'h7005, AMBA_CHI_RESP_PCRD_GRANT);
     send_resp("rsp6", 16'h7006, AMBA_CHI_RESP_COMP);
     send_resp("rsp7", 16'h7007, AMBA_CHI_RESP_FAIL);
 
@@ -42,8 +43,8 @@ class amba_chi_slave_txn_coverage_seq extends amba_chi_slave_txn_lib_seq;
     send_data_beat("datA", 16'h700A, 32'h700A_100A, 4'd0, 1'b1, 16'h0FF0,
                    AMBA_CHI_VERSION_E, 6'h0A, 4'h6, 2'b01, 8'h17, 1'b1, 1'b1);
 
-    send_resp("rspB", 16'h700B, AMBA_CHI_RESP_PCRD_GRANT);
     send_snoop("snpB", 16'h700B, AMBA_CHI_SNOOP_DVM, AMBA_CHI_VERSION_E, 3'd1, 11'h010);
+    send_resp("rspB", 16'h700B, AMBA_CHI_RESP_COMP);
 
     send_snoop("snpC", 16'h700C, AMBA_CHI_SNOOP_STASH_ONCE_SHARED, AMBA_CHI_VERSION_E, 3'd0, 11'h000);
     send_resp("rspC", 16'h700C, AMBA_CHI_RESP_COMP);

@@ -8,6 +8,8 @@ class amba_chi_slave_retry_reissue_seq extends amba_chi_slave_txn_lib_seq;
   task body();
     delay_ns(30ns);
     send_resp("rsp_retry", 16'h9201, AMBA_CHI_RESP_RETRY);
+    delay_ns(20ns);
+    send_resp("rsp_pcrd_grant", 16'h9201, AMBA_CHI_RESP_PCRD_GRANT);
     delay_ns(80ns);
     send_resp("rsp_comp", 16'h9201, AMBA_CHI_RESP_COMP);
   endtask

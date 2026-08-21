@@ -8,11 +8,11 @@ class amba_chi_slave_snoop_type_matrix_seq extends amba_chi_slave_txn_lib_seq;
   task body();
     delay_ns(50ns);
 
-    send_resp("rsp0", 16'h9300, AMBA_CHI_RESP_COMP);
     send_snoop("snp0", 16'h9300, AMBA_CHI_SNOOP_DVM);
+    send_resp("rsp0", 16'h9300, AMBA_CHI_RESP_COMP);
 
-    send_resp("rsp1", 16'h9301, AMBA_CHI_RESP_COMP);
     send_snoop("snp1", 16'h9301, AMBA_CHI_SNOOP_STASH_ONCE_SHARED);
+    send_resp("rsp1", 16'h9301, AMBA_CHI_RESP_COMP);
 
     send_resp("rsp2", 16'h9302, AMBA_CHI_RESP_COMP);
     send_snoop("snp2", 16'h9302, AMBA_CHI_SNOOP_READ_SHARED);

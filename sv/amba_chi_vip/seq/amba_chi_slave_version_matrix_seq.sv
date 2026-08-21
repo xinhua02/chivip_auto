@@ -29,19 +29,20 @@ class amba_chi_slave_version_matrix_seq extends amba_chi_slave_txn_lib_seq;
         send_data_beat("data_c1", 16'hC102, 32'hcccc_c102, 4'd0, 1'b1, 16'hFFFF, AMBA_CHI_VERSION_C);
       end
       AMBA_CHI_VERSION_D: begin
-        send_resp("rsp_d0", 16'hD101, AMBA_CHI_RESP_COMP, AMBA_CHI_VERSION_D);
         send_snoop("snoop_d0", 16'hD101, AMBA_CHI_SNOOP_DVM, AMBA_CHI_VERSION_D);
+        send_resp("rsp_d0", 16'hD101, AMBA_CHI_RESP_COMP, AMBA_CHI_VERSION_D);
         send_resp("rsp_d1", 16'hD102, AMBA_CHI_RESP_COMP, AMBA_CHI_VERSION_D);
       end
       AMBA_CHI_VERSION_E: begin
         send_resp("rsp_e0", 16'hE101, AMBA_CHI_RESP_COMPDB, AMBA_CHI_VERSION_E, 6'h05, 4'h6);
         send_data_beat("data_e0", 16'hE101, 32'heeee_e101, 4'd0, 1'b1, 16'hFFFF,
                        AMBA_CHI_VERSION_E, 6'h05, 4'h6);
-        send_resp("rsp_e1", 16'hE102, AMBA_CHI_RESP_COMP, AMBA_CHI_VERSION_E);
         send_snoop("snoop_e1", 16'hE102, AMBA_CHI_SNOOP_STASH_ONCE_SHARED, AMBA_CHI_VERSION_E);
+        send_resp("rsp_e1", 16'hE102, AMBA_CHI_RESP_COMP, AMBA_CHI_VERSION_E);
       end
       AMBA_CHI_VERSION_F: begin
-        send_resp("rsp_f0", 16'hF101, AMBA_CHI_RESP_PCRD_GRANT, AMBA_CHI_VERSION_F);
+        send_resp("rsp_f0_retry", 16'hF101, AMBA_CHI_RESP_RETRY, AMBA_CHI_VERSION_F);
+        send_resp("rsp_f0_pcrd", 16'hF101, AMBA_CHI_RESP_PCRD_GRANT, AMBA_CHI_VERSION_F);
         send_resp("rsp_f1", 16'hF102, AMBA_CHI_RESP_COMPDB, AMBA_CHI_VERSION_F, 6'h06, 4'h7);
         send_data_beat("data_f1", 16'hF102, 32'hffff_f102, 4'd0, 1'b1, 16'hFFFF,
                        AMBA_CHI_VERSION_F, 6'h06, 4'h7);
