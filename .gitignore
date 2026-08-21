@@ -1,2 +1,9 @@
 sv/amba_chi_vip/sim_output/
 sv/amba_chi_vip/work/
+.agent-analyst.md
+.agent-architect.md
+.agent-reviewer.md
+.prompt.md
+sv/amba_chi_vip/script/transcript
+sv/amba_chi_vip/script/work/
+sv/amba_chi_vip/vish_stacktrace.vstf
