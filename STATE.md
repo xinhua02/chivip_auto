@@ -1,6 +1,42 @@
 # CI Triage State
 
-**Last Updated:** 2026-09-12T13:28:00Z
+**Last Updated:** 2026-10-13T04:20:00Z
+
+---
+
+## Triage Run: 2026-10-13T04:15 (analyzing yesterday 2026-10-12)
+
+### Findings
+
+| Field | Value |
+|-------|-------|
+| Failed runs from 2026-10-12 | 1 (id 38299332745, `CI Fix Loop`) |
+| Failing step | `Run CI fix loop` (`copilot -p ...`) |
+| Error | `Authentication token found but could not be validated ... 401 Bad credentials` |
+
+```json
+{
+  "issue_type": "other",
+  "root_cause": "Secret COPILOT_CLI_TOKEN (exposed as GITHUB_TOKEN to the Copilot CLI) is expired/revoked/invalid, so the CLI fails authentication",
+  "difficulty": "simple",
+  "auto_fixable": false,
+  "file_path": ".github/workflows/ci-fix-loop.yml",
+  "line_number": 21
+}
+```
+
+The workflow file is correct; the fix is rotating the repository secret, which cannot be done via a code change.
+Other recent runs (2026-10-13 03:44-04:10, manual re-runs) fail on `main` as well, likely for the same reason (not verified).
+
+### Actions Taken
+
+| Step | Status |
+|------|--------|
+| Branch / ci-fixer / code-reviewer / PR | N/A, no auto-fixable issue |
+
+### Required manual action
+
+Create a new PAT/token with Copilot access and update the `COPILOT_CLI_TOKEN` repository secret, then re-run `CI Fix Loop`.
 
 ---
 
