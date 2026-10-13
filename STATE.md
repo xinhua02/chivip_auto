@@ -1,6 +1,15 @@
 # CI Triage State
 
-**Last Updated:** 2026-10-13T04:20:00Z
+**Last Updated:** 2026-10-13T17:30:00Z
+
+---
+
+## Triage Run: 2026-10-13T17:27 (analyzing yesterday 2026-10-12)
+
+- Only failed run from 2026-10-12: id 38299332745 (`CI Fix Loop`), same 401 "Bad credentials" auth failure (re-confirmed from logs).
+- Classification: `other`, difficulty simple, **auto_fixable: false** (expired `COPILOT_CLI_TOKEN` secret; not a code issue).
+- Actions: no branch, ci-fixer, code-reviewer, or PR created.
+- Update: run 38345505938 (2026-10-13 04:14) succeeded, so the token appears to have been fixed. Run 38438639715 is in progress.
 
 ---
 
