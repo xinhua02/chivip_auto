@@ -1,6 +1,15 @@
 # CI Triage State
 
-**Last Updated:** 2026-10-13T17:30:00Z
+**Last Updated:** 2026-10-14T15:00:00Z
+
+---
+
+## Triage Run: 2026-10-14T14:58 (analyzing yesterday 2026-10-13)
+
+- Failed runs on 2026-10-13 (all `CI Fix Loop`, `workflow_dispatch`, `main`): 38343150320, 38343794675, 38344179935, 38344803167, 38345170357. Runs 38345505938 and 38438639715 succeeded.
+- Logs for 38343150320 and 38345170357 show `401 Bad credentials` (the other three were not inspected line by line).
+- Classification: `other`, difficulty simple, **auto_fixable: false** (invalid `COPILOT_CLI_TOKEN` secret, not a code issue). Later successful runs indicate it has been rotated.
+- Actions: no branch, ci-fixer, code-reviewer, or PR created.
 
 ---
 
